@@ -9,6 +9,7 @@ export interface Movie {
   cast: string[];
   synopsis: string;
   duration: string;
+  streamingPlatforms: string[];
 }
 
 export const movies: Movie[] = [
@@ -22,7 +23,8 @@ export const movies: Movie[] = [
     director: "Todd Haynes",
     cast: ["Cate Blanchett", "Rooney Mara", "Sarah Paulson"],
     synopsis: "Uma jovem fotógrafa se apaixona por uma mulher mais velha e elegante nos anos 1950.",
-    duration: "118 min"
+    duration: "118 min",
+    streamingPlatforms: ["Netflix", "Amazon Prime Video", "Globoplay"]
   },
   {
     id: 2,
@@ -34,7 +36,8 @@ export const movies: Movie[] = [
     director: "Ol Parker",
     cast: ["Piper Perabo", "Lena Headey", "Matthew Goode"],
     synopsis: "Uma noiva recém-casada se apaixona pela florista de seu casamento.",
-    duration: "90 min"
+    duration: "90 min",
+    streamingPlatforms: ["Amazon Prime Video", "Paramount+"]
   },
   {
     id: 3,
@@ -46,7 +49,8 @@ export const movies: Movie[] = [
     director: "Jamie Babbit",
     cast: ["Natasha Lyonne", "Clea DuVall", "RuPaul"],
     synopsis: "Uma líder de torcida é enviada para um campo de 'cura' quando seus pais suspeitam que ela é lésbica.",
-    duration: "85 min"
+    duration: "85 min",
+    streamingPlatforms: ["Tubi", "Pluto TV"]
   },
   {
     id: 4,
@@ -58,7 +62,8 @@ export const movies: Movie[] = [
     director: "Celine Sciamma",
     cast: ["Noémie Merlant", "Adèle Haenel"],
     synopsis: "Duas jovens mulheres exploram sua sexualidade em um verão transformador.",
-    duration: "95 min"
+    duration: "95 min",
+    streamingPlatforms: ["MUBI", "Netflix"]
   },
   {
     id: 5,
@@ -70,7 +75,8 @@ export const movies: Movie[] = [
     director: "Kristen Stewart",
     cast: ["Phoebe Bridgers", "Lucy Dacus", "Julien Baker"],
     synopsis: "Documentário sobre a formação e turnê do supergrupo musical boygenius.",
-    duration: "72 min"
+    duration: "72 min",
+    streamingPlatforms: ["Hulu", "Disney+"]
   },
   {
     id: 6,
@@ -82,7 +88,8 @@ export const movies: Movie[] = [
     director: "Angela Robinson",
     cast: ["Sara Foster", "Jordana Brewster", "Devon Aoki"],
     synopsis: "Estudantes-espiãs enfrentam um dilema quando uma delas se apaixona por uma criminosa.",
-    duration: "91 min"
+    duration: "91 min",
+    streamingPlatforms: ["Tubi", "Crackle"]
   },
   {
     id: 7,
@@ -94,7 +101,8 @@ export const movies: Movie[] = [
     director: "Lana Wachowski, Lilly Wachowski",
     cast: ["Jennifer Tilly", "Gina Gershon", "Joe Pantoliano"],
     synopsis: "Uma ex-presidiária e a namorada de um mafioso planejam roubar dois milhões de dólares.",
-    duration: "109 min"
+    duration: "109 min",
+    streamingPlatforms: ["Amazon Prime Video", "Apple TV", "Vudu"]
   },
   {
     id: 8,
@@ -106,7 +114,8 @@ export const movies: Movie[] = [
     director: "Cheryl Dunye",
     cast: ["Cheryl Dunye", "Guinevere Turner", "Valarie Walker"],
     synopsis: "Uma cineasta negra investiga a vida de uma atriz dos anos 1930 conhecida apenas como 'The Watermelon Woman'.",
-    duration: "90 min"
+    duration: "90 min",
+    streamingPlatforms: ["Kanopy", "Hoopla"]
   },
   {
     id: 9,
@@ -118,7 +127,8 @@ export const movies: Movie[] = [
     director: "Maria Maggenti",
     cast: ["Laurel Holloman", "Nicole Ari Parker", "Maggie Moore"],
     synopsis: "Duas adolescentes de origens diferentes se apaixonam em uma pequena cidade.",
-    duration: "94 min"
+    duration: "94 min",
+    streamingPlatforms: ["Tubi", "Peacock"]
   },
   {
     id: 10,
@@ -130,7 +140,8 @@ export const movies: Movie[] = [
     director: "Wanuri Kahiu",
     cast: ["Samantha Mugatsia", "Sheila Munyiva", "Jimmi Gathu"],
     synopsis: "Duas jovens mulheres quenianas se apaixonam apesar da pressão social e familiar.",
-    duration: "83 min"
+    duration: "83 min",
+    streamingPlatforms: ["Netflix", "MUBI"]
   },
   {
     id: 11,
@@ -142,7 +153,8 @@ export const movies: Movie[] = [
     director: "Sebastián Lelio",
     cast: ["Rachel Weisz", "Rachel McAdams", "Alessandro Nivola"],
     synopsis: "Uma mulher retorna à sua comunidade ortodoxa judaica e reacende um romance proibido.",
-    duration: "114 min"
+    duration: "114 min",
+    streamingPlatforms: ["Amazon Prime Video", "Hulu", "Paramount+"]
   },
   {
     id: 12,
@@ -154,7 +166,8 @@ export const movies: Movie[] = [
     director: "Isabel Coixet",
     cast: ["Natalia de Molina", "Greta Fernández", "Sara Casasnovas"],
     synopsis: "Baseado na história real de duas mulheres que se casaram na Espanha de 1901.",
-    duration: "120 min"
+    duration: "120 min",
+    streamingPlatforms: ["Netflix", "Filmin"]
   },
   {
     id: 13,
@@ -166,7 +179,8 @@ export const movies: Movie[] = [
     director: "Alice Wu",
     cast: ["Leah Lewis", "Daniel Diemer", "Alexxis Lemire"],
     synopsis: "Uma estudante tímida ajuda um atleta a conquistar a garota por quem ela secretamente se apaixonou.",
-    duration: "104 min"
+    duration: "104 min",
+    streamingPlatforms: ["Netflix"]
   },
   {
     id: 14,
@@ -178,7 +192,8 @@ export const movies: Movie[] = [
     director: "Clea DuVall",
     cast: ["Kristen Stewart", "Mackenzie Davis", "Alison Brie"],
     synopsis: "Uma mulher planeja pedir a namorada em casamento durante o Natal, mas descobre que ela não saiu do armário para a família.",
-    duration: "102 min"
+    duration: "102 min",
+    streamingPlatforms: ["Hulu", "Amazon Prime Video"]
   },
   {
     id: 15,
@@ -190,7 +205,8 @@ export const movies: Movie[] = [
     director: "Dee Rees",
     cast: ["Adepero Oduye", "Kim Wayans", "Aasha Davis"],
     synopsis: "Uma adolescente negra luta para aceitar sua sexualidade enquanto navega pela pressão familiar e social.",
-    duration: "86 min"
+    duration: "86 min",
+    streamingPlatforms: ["Max", "Tubi", "Crackle"]
   },
   {
     id: 16,
@@ -202,7 +218,8 @@ export const movies: Movie[] = [
     director: "F. Gary Gray",
     cast: ["Jada Pinkett Smith", "Queen Latifah", "Vivica A. Fox"],
     synopsis: "Quatro amigas de Los Angeles decidem roubar bancos para escapar da pobreza.",
-    duration: "123 min"
+    duration: "123 min",
+    streamingPlatforms: ["Netflix", "Hulu", "Amazon Prime Video"]
   }
 ];
 

@@ -5,12 +5,24 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Search, Filter, Grid, List } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const AllMovies = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGenre, setSelectedGenre] = useState("all");
   const [sortBy, setSortBy] = useState("title");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const moviesPerPage = viewMode === "grid" ? 12 : 8;
 
   const genres = getAllGenres();
 
@@ -50,6 +62,18 @@ const AllMovies = () => {
     return sorted;
   }, [searchTerm, selectedGenre, sortBy]);
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredAndSortedMovies.length / moviesPerPage);
+  const startIndex = (currentPage - 1) * moviesPerPage;
+  const endIndex = startIndex + moviesPerPage;
+  const currentMovies = filteredAndSortedMovies.slice(startIndex, endIndex);
+
+  // Reset to first page when filters change
+  const handleFilterChange = (callback: () => void) => {
+    callback(); 
+    setCurrentPage(1);
+  };
+
   return (
     <div className="min-h-screen py-8">
       <div className="container mx-auto px-4">
@@ -73,13 +97,13 @@ const AllMovies = () => {
               <Input
                 placeholder="Buscar filmes..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => handleFilterChange(() => setSearchTerm(e.target.value))}
                 className="pl-10"
               />
             </div>
 
             {/* Genre Filter */}
-            <Select value={selectedGenre} onValueChange={setSelectedGenre}>
+            <Select value={selectedGenre} onValueChange={(value) => handleFilterChange(() => setSelectedGenre(value))}>
               <SelectTrigger>
                 <Filter className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="Gênero" />
@@ -93,7 +117,7 @@ const AllMovies = () => {
             </Select>
 
             {/* Sort */}
-            <Select value={sortBy} onValueChange={setSortBy}>
+            <Select value={sortBy} onValueChange={(value) => handleFilterChange(() => setSortBy(value))}>
               <SelectTrigger>
                 <SelectValue placeholder="Ordenar por" />
               </SelectTrigger>
@@ -109,7 +133,7 @@ const AllMovies = () => {
               <Button
                 variant={viewMode === "grid" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode("grid")}
+                onClick={() => handleFilterChange(() => setViewMode("grid"))}
                 className="flex-1"
               >
                 <Grid className="w-4 h-4" />
@@ -117,7 +141,7 @@ const AllMovies = () => {
               <Button
                 variant={viewMode === "list" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode("list")}
+                onClick={() => handleFilterChange(() => setViewMode("list"))}
                 className="flex-1"
               >
                 <List className="w-4 h-4" />
@@ -127,55 +151,127 @@ const AllMovies = () => {
         </div>
 
         {/* Results Count */}
-        <div className="mb-6">
+        <div className="mb-6 flex justify-between items-center">
           <p className="text-muted-foreground">
             {filteredAndSortedMovies.length} filme(s) encontrado(s)
+            {totalPages > 1 && (
+              <span className="ml-2">
+                • Página {currentPage} de {totalPages}
+              </span>
+            )}
           </p>
         </div>
 
         {/* Movies Grid/List */}
         {filteredAndSortedMovies.length > 0 ? (
-          <div className={
-            viewMode === "grid" 
-              ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-              : "space-y-4"
-          }>
-            {filteredAndSortedMovies.map((movie) => (
-              <div key={movie.id} className={viewMode === "list" ? "flex gap-4 p-4 bg-card rounded-lg" : ""}>
-                {viewMode === "list" ? (
-                  <>
-                    <div className="w-24 h-36 flex-shrink-0">
-                      <img
-                        src={movie.poster}
-                        alt={`Poster do filme ${movie.title}`}
-                        className="w-full h-full object-cover rounded"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg text-foreground mb-1">{movie.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-2">{movie.year} • {movie.director}</p>
-                      <p className="text-sm text-foreground mb-2 line-clamp-2">{movie.synopsis}</p>
-                      <div className="flex items-center gap-2">
-                        <div className="flex">
-                          {Array.from({ length: 5 }, (_, i) => (
-                            <span
-                              key={i}
-                              className={i < Math.floor(movie.rating) ? "text-accent" : "text-muted-foreground"}
-                            >
-                              ♥
-                            </span>
-                          ))}
-                        </div>
-                        <span className="text-sm text-muted-foreground">({movie.rating})</span>
+          <>
+            <div className={
+              viewMode === "grid" 
+                ? "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6"
+                : "space-y-4"
+            }>
+              {currentMovies.map((movie) => (
+                <div key={movie.id} className={viewMode === "list" ? "flex gap-4 p-4 bg-card rounded-lg" : ""}>
+                  {viewMode === "list" ? (
+                    <>
+                      <div className="w-20 sm:w-24 h-30 sm:h-36 flex-shrink-0">
+                        <img
+                          src={movie.poster}
+                          alt={`Poster do filme ${movie.title}`}
+                          className="w-full h-full object-cover rounded"
+                        />
                       </div>
-                    </div>
-                  </>
-                ) : (
-                  <MovieCard movie={movie} showGenre />
-                )}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-base sm:text-lg text-foreground mb-1 truncate">{movie.title}</h3>
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-2">{movie.year} • {movie.director}</p>
+                        <p className="text-xs sm:text-sm text-foreground mb-2 line-clamp-2">{movie.synopsis}</p>
+                        <div className="flex items-center gap-2">
+                          <div className="flex">
+                            {Array.from({ length: 5 }, (_, i) => (
+                              <span
+                                key={i}
+                                className={`text-xs sm:text-sm ${i < Math.floor(movie.rating) ? "text-accent" : "text-muted-foreground"}`}
+                              >
+                                ♥
+                              </span>
+                            ))}
+                          </div>
+                          <span className="text-xs sm:text-sm text-muted-foreground">({movie.rating})</span>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <MovieCard movie={movie} showGenre />
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-8 flex justify-center">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        href="#" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage > 1) setCurrentPage(currentPage - 1);
+                        }}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                      let pageNumber;
+                      if (totalPages <= 5) {
+                        pageNumber = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNumber = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNumber = totalPages - 4 + i;
+                      } else {
+                        pageNumber = currentPage - 2 + i;
+                      }
+                      
+                      return (
+                        <PaginationItem key={pageNumber}>
+                          <PaginationLink
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setCurrentPage(pageNumber);
+                            }}
+                            isActive={currentPage === pageNumber}
+                          >
+                            {pageNumber}
+                          </PaginationLink>
+                        </PaginationItem>
+                      );
+                    })}
+                    
+                    {totalPages > 5 && currentPage < totalPages - 2 && (
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    )}
+                    
+                    <PaginationItem>
+                      <PaginationNext 
+                        href="#" 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                        }}
+                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-12">
             <div className="venus-symbol text-4xl mb-4 opacity-20" />

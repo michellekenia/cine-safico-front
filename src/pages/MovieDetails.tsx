@@ -3,7 +3,7 @@ import { useState } from "react";
 import { getMovieById } from "@/data/movies";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Heart, Calendar, Clock, User, Users } from "lucide-react";
+import { ArrowLeft, Heart, Calendar, Clock, User, Tv } from "lucide-react";
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -187,6 +187,26 @@ const MovieDetails = () => {
               <p className="text-foreground leading-relaxed">
                 {movie.synopsis}
               </p>
+            </div>
+
+            {/* Streaming Platforms */}
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-foreground mb-3 flex items-center">
+                <Tv className="w-5 h-5 mr-2" />
+                Onde Assistir
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {movie.streamingPlatforms.map((platform) => (
+                  <Badge key={platform} variant="outline" className="px-3 py-1">
+                    {platform}
+                  </Badge>
+                ))}
+                {movie.streamingPlatforms.length === 0 && (
+                  <p className="text-muted-foreground text-sm">
+                    Informações de streaming não disponíveis no momento
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Cast & Crew */}
