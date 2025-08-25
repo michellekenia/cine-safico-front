@@ -10,6 +10,7 @@ const MovieDetails = () => {
   const navigate = useNavigate();
   const [userRating, setUserRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const movie = getMovieById(Number(id));
 
@@ -28,7 +29,9 @@ const MovieDetails = () => {
 
   const handleRatingClick = (rating: number) => {
     setUserRating(rating);
+    setIsEditing(false);
     // Here you would typically save the rating to a backend
+    console.log(`Rating saved: ${rating}/5 for movie ${movie.title}`);
   };
 
   const renderRatingHearts = (rating: number, isInteractive = false) => {
@@ -38,9 +41,9 @@ const MovieDetails = () => {
       hearts.push(
         <Heart
           key={i}
-          className={`w-6 h-6 cursor-pointer transition-all duration-200 ${
+          className={`w-6 h-6 transition-all duration-200 ${
             filled ? "text-accent fill-accent" : "text-muted-foreground"
-          } ${isInteractive ? "hover:scale-110" : ""}`}
+          } ${isInteractive ? "cursor-pointer hover:scale-110 hover:text-accent" : ""}`}
           onClick={isInteractive ? () => handleRatingClick(i) : undefined}
           onMouseEnter={isInteractive ? () => setHoverRating(i) : undefined}
           onMouseLeave={isInteractive ? () => setHoverRating(0) : undefined}
@@ -127,25 +130,56 @@ const MovieDetails = () => {
 
               {/* User Rating */}
               <div>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Sua Avaliação {userRating > 0 && <span className="text-accent">(clique para editar)</span>}
-                </p>
-                <div className="flex items-center gap-2">
-                  {renderRatingHearts(userRating, true)}
-                  {userRating > 0 && (
-                    <div className="flex items-center gap-2 ml-2">
-                      <span className="text-sm text-accent">
-                        {userRating}/5
-                      </span>
-                      <button
-                        onClick={() => setUserRating(0)}
-                        className="text-xs text-muted-foreground hover:text-accent transition-colors underline"
-                      >
-                        Limpar
-                      </button>
-                    </div>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm text-muted-foreground">
+                    Sua Avaliação
+                  </p>
+                  {userRating > 0 && !isEditing && (
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="text-xs text-accent hover:text-accent/80 transition-colors underline"
+                    >
+                      Editar
+                    </button>
                   )}
                 </div>
+                
+                {isEditing || userRating === 0 ? (
+                  <div className="space-y-3">
+                    <p className="text-xs text-muted-foreground">
+                      Clique em uma estrela para avaliar:
+                    </p>
+                    <div className="flex items-center gap-2">
+                      {renderRatingHearts(userRating, true)}
+                    </div>
+                    {isEditing && (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setIsEditing(false)}
+                          className="text-xs text-muted-foreground hover:text-accent transition-colors underline"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={() => {
+                            setUserRating(0);
+                            setIsEditing(false);
+                          }}
+                          className="text-xs text-destructive hover:text-destructive/80 transition-colors underline"
+                        >
+                          Remover Avaliação
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    {renderRatingHearts(userRating, false)}
+                    <span className="text-sm text-accent ml-2">
+                      {userRating}/5
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 

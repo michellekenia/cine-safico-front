@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const About = () => {
   return (
     <div className="min-h-screen py-16">
@@ -100,12 +102,12 @@ const About = () => {
               >
                 Entre em Contato
               </a>
-              <a 
-                href="/filmes" 
+              <Link 
+                to="/filmes" 
                 className="btn-secondary inline-flex items-center justify-center"
               >
                 Explorar Filmes
-              </a>
+              </Link>
             </div>
           </div>
         </section>
