@@ -2,41 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Cine Sáfico Design System - Sapphic Cinema Catalog */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    /* Core Color Palette - Sapphic Cinema Theme */
+    --primary: 270 69% 25%;              /* #47126B - Deep Purple */
+    --primary-light: 271 78% 30%;        /* #571089 - Medium Purple */  
+    --primary-foreground: 0 0% 100%;     /* #FFFFFF - White */
+    
+    --accent: 307 42% 47%;               /* #AC46A1 - Magenta */
+    --accent-foreground: 0 0% 100%;      /* #FFFFFF - White */
+    
+    --secondary: 194 19% 23%;            /* #2F3E46 - Dark Teal */
+    --secondary-light: 194 19% 26%;      /* #354F52 - Medium Teal */
+    --secondary-foreground: 0 0% 100%;   /* #FFFFFF - White */
+    
+    --background: 0 0% 100%;             /* #FFFFFF - White */
+    --foreground: 270 69% 25%;           /* #47126B - Deep Purple for text */
+    
+    /* UI Elements */
+    --muted: 194 19% 23% / 0.1;
+    --muted-foreground: 194 19% 23%;
+    
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
+    --card-foreground: 270 69% 25%;
+    
+    --border: 270 69% 25% / 0.2;
+    --input: 270 69% 25% / 0.1;
+    --ring: 307 42% 47%;
+    
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 270 69% 25%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Design System Extensions */
+    --gradient-primary: linear-gradient(135deg, hsl(270 69% 25%), hsl(271 78% 30%));
+    --gradient-accent: linear-gradient(135deg, hsl(307 42% 47%), hsl(271 78% 30%));
+    --gradient-hero: linear-gradient(135deg, hsl(270 69% 25% / 0.9), hsl(307 42% 47% / 0.9));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(270 69% 25% / 0.02));
+    
+    --shadow-elegant: 0 10px 30px -10px hsl(270 69% 25% / 0.3);
+    --shadow-glow: 0 0 40px hsl(307 42% 47% / 0.4);
+    --shadow-card: 0 4px 20px hsl(270 69% 25% / 0.15);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +115,106 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-raleway;
+  }
+}
+
+@layer components {
+  /* Double Venus Symbol Component */
+  .venus-symbol::before {
+    content: "⚢";
+    @apply text-accent opacity-30 absolute -z-10;
+  }
+
+  /* Hero Section Styles */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+
+  /* Custom Movie Card Hover Effects */
+  .movie-card {
+    @apply transform transition-all duration-300 hover:scale-105 hover:shadow-lg;
+    box-shadow: var(--shadow-card);
+  }
+
+  .movie-card:hover {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Rating Hearts */
+  .heart-rating {
+    @apply text-accent cursor-pointer transition-all duration-200 hover:scale-110;
+  }
+
+  .heart-filled {
+    @apply text-accent;
+  }
+
+  .heart-empty {
+    @apply text-muted-foreground;
+  }
+
+  /* Button Variants */
+  .btn-hero {
+    @apply bg-accent text-accent-foreground hover:bg-accent/90 px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg;
+    box-shadow: var(--shadow-elegant);
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary-light px-6 py-2 rounded-lg font-medium;
+    transition: var(--transition-smooth);
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary-light px-6 py-2 rounded-lg font-medium;
+    transition: var(--transition-smooth);
+  }
+
+  /* Navigation Styles */
+  .nav-link {
+    @apply text-foreground hover:text-accent font-medium transition-colors duration-200 relative;
+  }
+
+  .nav-link:hover::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-accent transform scale-x-100 transition-transform duration-200;
+  }
+
+  .nav-link::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-accent transform scale-x-0 transition-transform duration-200 origin-left;
+  }
+
+  /* Genre Section Styles */
+  .genre-scroll {
+    @apply flex gap-6 overflow-x-auto pb-4 scrollbar-hide;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Filter Bar Styles */
+  .filter-bar {
+    @apply bg-card border border-border rounded-lg p-4 shadow-sm;
+  }
+
+  /* Form Styles */
+  .form-input {
+    @apply w-full px-4 py-2 border border-input rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
+    transition: var(--transition-fast);
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-foreground mb-2;
   }
 }
