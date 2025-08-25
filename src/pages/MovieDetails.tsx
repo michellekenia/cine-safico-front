@@ -73,7 +73,7 @@ const MovieDetails = () => {
                 alt={`Poster do filme ${movie.title}`}
                 className="w-full h-full object-cover"
               />
-              <div className="venus-symbol absolute top-4 right-4 text-3xl opacity-30" />
+              <div className="geometric-accent absolute top-4 right-4" />
             </div>
           </div>
 
@@ -83,7 +83,7 @@ const MovieDetails = () => {
               <h1 className="text-4xl md:text-5xl font-bold text-primary">
                 {movie.title}
               </h1>
-              <div className="venus-symbol text-3xl opacity-30" />
+              <div className="geometric-accent-small" />
             </div>
 
             {/* Genres */}
@@ -96,7 +96,7 @@ const MovieDetails = () => {
             </div>
 
             {/* Movie Meta */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className="flex items-center text-muted-foreground">
                 <Calendar className="w-4 h-4 mr-2" />
                 <span>{movie.year}</span>
@@ -108,10 +108,6 @@ const MovieDetails = () => {
               <div className="flex items-center text-muted-foreground">
                 <User className="w-4 h-4 mr-2" />
                 <span>{movie.director}</span>
-              </div>
-              <div className="flex items-center text-muted-foreground">
-                <Users className="w-4 h-4 mr-2" />
-                <span>{movie.cast.length} atores</span>
               </div>
             </div>
 
@@ -131,13 +127,23 @@ const MovieDetails = () => {
 
               {/* User Rating */}
               <div>
-                <p className="text-sm text-muted-foreground mb-2">Sua Avaliação</p>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Sua Avaliação {userRating > 0 && <span className="text-accent">(clique para editar)</span>}
+                </p>
                 <div className="flex items-center gap-2">
                   {renderRatingHearts(userRating, true)}
                   {userRating > 0 && (
-                    <span className="text-sm text-accent ml-2">
-                      Você avaliou: {userRating}/5
-                    </span>
+                    <div className="flex items-center gap-2 ml-2">
+                      <span className="text-sm text-accent">
+                        {userRating}/5
+                      </span>
+                      <button
+                        onClick={() => setUserRating(0)}
+                        className="text-xs text-muted-foreground hover:text-accent transition-colors underline"
+                      >
+                        Limpar
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>

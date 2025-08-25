@@ -120,10 +120,60 @@
 }
 
 @layer components {
-  /* Double Venus Symbol Component */
+  /* Geometric Accents - Inspired by Venus Symbol */
+  .geometric-accent {
+    @apply w-8 h-8 relative opacity-20;
+  }
+  
+  .geometric-accent::before,
+  .geometric-accent::after {
+    content: "";
+    @apply absolute w-6 h-6 border-2 border-accent rounded-full;
+  }
+  
+  .geometric-accent::before {
+    @apply top-0 left-0;
+  }
+  
+  .geometric-accent::after {
+    @apply top-2 left-2;
+  }
+
+  .geometric-accent-small {
+    @apply w-6 h-6 relative opacity-20;
+  }
+  
+  .geometric-accent-small::before,
+  .geometric-accent-small::after {
+    content: "";
+    @apply absolute w-4 h-4 border-2 border-accent rounded-full;
+  }
+  
+  .geometric-accent-small::before {
+    @apply top-0 left-0;
+  }
+  
+  .geometric-accent-small::after {
+    @apply top-1 left-1;
+  }
+
+  /* Legacy venus-symbol for backward compatibility */
+  .venus-symbol {
+    @apply w-6 h-6 relative opacity-20;
+  }
+  
+  .venus-symbol::before,
+  .venus-symbol::after {
+    content: "";
+    @apply absolute w-4 h-4 border-2 border-accent rounded-full;
+  }
+  
   .venus-symbol::before {
-    content: "⚢";
-    @apply text-accent opacity-30 absolute -z-10;
+    @apply top-0 left-0;
+  }
+  
+  .venus-symbol::after {
+    @apply top-1 left-1;
   }
 
   /* Hero Section Styles */
