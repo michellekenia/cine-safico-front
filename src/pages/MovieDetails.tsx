@@ -130,19 +130,9 @@ const MovieDetails = () => {
 
               {/* User Rating */}
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm text-muted-foreground">
-                    Sua Avaliação
-                  </p>
-                  {userRating > 0 && !isEditing && (
-                    <button
-                      onClick={() => setIsEditing(true)}
-                      className="text-xs text-accent hover:text-accent/80 transition-colors underline"
-                    >
-                      Editar
-                    </button>
-                  )}
-                </div>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Sua Avaliação
+                </p>
                 
                 {isEditing || userRating === 0 ? (
                   <div className="space-y-3">
@@ -173,11 +163,19 @@ const MovieDetails = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2">
-                    {renderRatingHearts(userRating, false)}
-                    <span className="text-sm text-accent ml-2">
-                      {userRating}/5
-                    </span>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      {renderRatingHearts(userRating, false)}
+                      <span className="text-sm text-accent ml-1">
+                        {userRating}/5
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      className="text-xs text-accent hover:text-accent/80 transition-colors underline"
+                    >
+                      Editar
+                    </button>
                   </div>
                 )}
               </div>
