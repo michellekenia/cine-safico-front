@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { getMovieById } from "@/data/movies";
+import { getMovieById } from "@/mocks/movies";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Heart, Calendar, Clock, User, Tv } from "lucide-react";
