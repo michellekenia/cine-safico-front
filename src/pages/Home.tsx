@@ -1,14 +1,46 @@
-import { getFeaturedMovies, getMoviesByGenre } from "@/data/movies";
+import { getFeaturedMovies, getMoviesByGenre } from "@/mocks/movies";
+
+// Components
 import MovieCard from "@/components/shared/MovieCard";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import { ChevronRight, Play } from "lucide-react";
 
+import { Link } from "react-router-dom";
+
+// React
+import { useEffect, useState } from "react";
+
+// Interface
+import { HomeMovies } from "@/shared/interfaces/home.interface";
+
+// Api
+import { getHighLightsMovies } from "../shared/api/home-movies";
+
 const Home = () => {
-  const featuredMovies = getFeaturedMovies();
+  const [highlightMovies, setHighlightMovies] = useState<HomeMovies[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   const dramaMovies = getMoviesByGenre("Drama").slice(0, 6);
   const romanceMovies = getMoviesByGenre("Romance").slice(0, 6);
   const comedyMovies = getMoviesByGenre("Comédia").slice(0, 6);
+
+  useEffect(() => {
+    const fetchHighlightMovies = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getHighLightsMovies();
+        setHighlightMovies(response);
+      } catch (err) {
+        setError('Erro ao carregar os filmes em destaque');
+        console.error('Erro:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHighlightMovies();
+  }, []);
 
   return (
     <div className="min-h-screen">
@@ -45,11 +77,17 @@ const Home = () => {
           </div>
           
           <div className="genre-scroll">
-            {featuredMovies.map((movie) => (
-              <div key={movie.id} className="min-w-[200px] md:min-w-[250px]">
-                <MovieCard movie={movie} />
-              </div>
-            ))}
+            {isLoading ? (
+              <div className="w-full text-center">Carregando...</div>
+            ) : error ? (
+              <div className="w-full text-center text-red-500">{error}</div>
+            ) : (
+              highlightMovies.map((movie) => (
+                <div key={movie.slug} className="min-w-[200px] md:min-w-[250px]">
+                  <MovieCard movie={movie} />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </section>

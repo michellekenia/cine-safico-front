@@ -5,10 +5,20 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
+server: {
+    proxy: {
+      // Qualquer requisição que comece com /api...
+      '/api': {
+        // ...será redirecionada para o seu backend na Render.
+        target: 'https://cine-safico.onrender.com',
+        // Muda a 'origin' do header para o target, essencial para o CORS funcionar
+        changeOrigin: true,
+        // Remove o /url do início da URL antes de enviar para o backend
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
+  
   plugins: [
     react(),
     mode === 'development' &&

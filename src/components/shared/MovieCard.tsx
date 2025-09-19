@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { Movie } from "@/data/movies";
-import { Heart, Star } from "lucide-react";
+import { HomeMovies } from "@/shared/interfaces/home.interface";
+import { Heart } from "lucide-react";
 
 interface MovieCardProps {
-  movie: Movie;
+  movie: HomeMovies | any; // usando any temporariamente para compatibilidade com dados mockados
   showGenre?: boolean;
 }
 
@@ -29,11 +29,11 @@ const MovieCard = ({ movie, showGenre = false }: MovieCardProps) => {
   };
 
   return (
-    <Link to={`/filme/${movie.id}`} className="group">
+    <Link to={`/filme/${movie.slug}`} className="group">
       <div className="movie-card bg-card rounded-lg overflow-hidden">
         <div className="relative aspect-[2/3] overflow-hidden">
           <img
-            src={movie.poster}
+            src={movie.posterImage || movie.poster}
             alt={`Poster do filme ${movie.title}`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             loading="lazy"
@@ -57,8 +57,8 @@ const MovieCard = ({ movie, showGenre = false }: MovieCardProps) => {
           </div>
           
           <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>{movie.year}</span>
-            {showGenre && movie.genre.length > 0 && (
+            <span>{movie.releaseDate || movie.year}</span>
+            {showGenre && movie.genre?.length > 0 && (
               <span className="text-xs bg-muted px-2 py-1 rounded">
                 {movie.genre[0]}
               </span>

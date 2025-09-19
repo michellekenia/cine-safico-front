@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { movies, getAllGenres } from "@/data/movies";
+import { movies, getAllGenres } from "@/mocks/movies";
 import MovieCard from "@/components/shared/MovieCard";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
