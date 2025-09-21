@@ -1,5 +1,3 @@
-import { getFeaturedMovies, getMoviesByGenre } from "@/mocks/movies";
-
 // Components
 import MovieCard from "@/components/shared/MovieCard";
 import { Button } from "@/components/ui/button";
