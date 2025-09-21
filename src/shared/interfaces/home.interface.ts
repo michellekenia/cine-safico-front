@@ -5,3 +5,5 @@ export interface HomeMovies {
   rating: string;
   posterImage: string;
 }
+
+export type GenreSections = Record<string, HomeMovies[]>;

@@ -1,13 +1,12 @@
 import apiClient from "./client";
-import { HomeMovies } from "../interfaces/home.interface";
+import { GenreSections, HomeMovies } from "../interfaces/home.interface";
 
 export async function getHighLightsMovies(): Promise<HomeMovies[]> {
     const response = await apiClient.get<HomeMovies[]>('/movies/highlights');
     return response.data;
 }
 
-export async function getGenresMovies(genre: string = 'comedy'): Promise<HomeMovies[]> {
-    const formattedGenre = genre.startsWith('/') ? genre.substring(1) : genre;
-    const response = await apiClient.get<HomeMovies[]>(`/movies/by-genre/${formattedGenre}`);
+export async function getGenresMovies(): Promise<GenreSections> {
+    const response = await apiClient.get<GenreSections>('/movies/by-genre');
     return response.data;    
 }
