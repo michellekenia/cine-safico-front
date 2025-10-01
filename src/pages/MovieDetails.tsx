@@ -447,34 +447,36 @@ const MovieDetails = () => {
             </div>
             
             {/* Additional Info - Countries and Languages */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              {/* Countries */}
-              {movie.country && movie.country.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">País</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {movie.country.map(country => (
-                      <Badge key={country.id} variant="secondary">
-                        {country.nomePt || country.nome}
-                      </Badge>
-                    ))}
+            <div className="mb-6">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-10">
+                {/* Countries */}
+                {movie.country && movie.country.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">País</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {movie.country.map(country => (
+                        <Badge key={country.id} variant="secondary">
+                          {country.nomePt || country.nome}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-              
-              {/* Languages */}
-              {movie.language && movie.language.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold text-foreground mb-3">Idioma</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {movie.language.map(lang => (
-                      <Badge key={lang.id} variant="secondary">
-                        {lang.nomePt || lang.nome}
-                      </Badge>
-                    ))}
+                )}
+                
+                {/* Languages */}
+                {movie.language && movie.language.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">Idioma</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {movie.language.map(lang => (
+                        <Badge key={lang.id} variant="secondary">
+                          {lang.nomePt || lang.nome}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
