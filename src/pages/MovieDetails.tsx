@@ -1,27 +1,102 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { getMovieById } from "@/mocks/movies";
+import { useState, useEffect } from "react";
+import { getMovieBySlug } from "@/shared/api/movie-details";
+import { MovieDetail } from "@/shared/interfaces/movies-details.interface";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Heart, Calendar, Clock, User, Tv } from "lucide-react";
+import { ArrowLeft, Heart, Calendar, Clock, User, Tv, Loader2 } from "lucide-react";
+
 
 const MovieDetails = () => {
-  const { id } = useParams();
+  const { id: slugOrId } = useParams();
   const navigate = useNavigate();
   const [userRating, setUserRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  
+  // Estados para API
+  const [movie, setMovie] = useState<MovieDetail | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Buscar dados da API
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      if (!slugOrId) return;
+      
+      setIsLoading(true);
+      setError(null);
+      
+      try {
+        const slug = slugOrId.toString();
+        console.log("Buscando filme com slug:", slug);
+        
+        const data = await getMovieBySlug(slug);
+        setMovie(data);
+      } catch (error: any) {
+        console.error("Erro ao buscar detalhes do filme:", error);
+        setError(error.message || "Erro ao carregar detalhes do filme");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const movie = getMovieById(Number(id));
+    fetchMovieDetails();
+  }, [slugOrId]);
+  
+  const getMovieProperty = {
+    poster: () => movie?.posterImage || '',
+    year: () => movie?.releaseDate || '',
+    genres: () => {
+      if (movie?.genres) {
+        return movie.genres.map(g => g.nome);
+      }
+      return [];
+    },
+    synopsis: () => {
+      if (movie) {
+        return movie.synopsisPt || movie.synopsisEn || 'Sinopse não disponível';
+      }
+      return '';
+    },
+    streamingPlatforms: () => movie?.streamingServices || [],
+    cast: () => [] 
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-10 h-10 animate-spin mx-auto text-accent mb-4" />
+          <p className="text-lg font-medium text-foreground">Carregando filme...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!movie) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Filme não encontrado</h1>
-          <Button onClick={() => navigate("/filmes")}>
-            Voltar para todos os filmes
-          </Button>
+        <div className="text-center max-w-md mx-auto">
+          <div className="venus-symbol text-4xl mb-6 opacity-20" />
+          <h1 className="text-2xl font-bold text-foreground mb-2">Filme não encontrado</h1>
+          <p className="text-muted-foreground mb-4">
+            Não foi possível encontrar um filme com o identificador "{slugOrId}".
+            {error && (
+              <span className="block mt-2 text-sm text-red-500">
+                Erro: {error}
+              </span>
+            )}
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Button onClick={() => navigate(-1)}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Voltar
+            </Button>
+            <Button variant="default" onClick={() => navigate("/filmes")}>
+              Ver todos os filmes
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -72,7 +147,7 @@ const MovieDetails = () => {
           <div className="lg:col-span-1">
             <div className="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-elegant">
               <img
-                src={movie.poster}
+                src={getMovieProperty.poster()}
                 alt={`Poster do filme ${movie.title}`}
                 className="w-full h-full object-cover"
               />
@@ -91,7 +166,7 @@ const MovieDetails = () => {
 
             {/* Genres */}
             <div className="flex flex-wrap gap-2 mb-6">
-              {movie.genre.map((genre) => (
+              {getMovieProperty.genres().map((genre) => (
                 <Badge key={genre} variant="secondary">
                   {genre}
                 </Badge>
@@ -102,7 +177,7 @@ const MovieDetails = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <div className="flex items-center text-muted-foreground">
                 <Calendar className="w-4 h-4 mr-2" />
-                <span>{movie.year}</span>
+                <span>{getMovieProperty.year()}</span>
               </div>
               <div className="flex items-center text-muted-foreground">
                 <Clock className="w-4 h-4 mr-2" />
@@ -120,7 +195,7 @@ const MovieDetails = () => {
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Avaliação Geral</p>
                   <div className="flex items-center gap-2">
-                    {renderRatingHearts(movie.rating)}
+                    {renderRatingHearts(typeof movie.rating === 'string' ? parseFloat(movie.rating) : movie.rating)}
                     <span className="text-lg font-semibold text-foreground">
                       {movie.rating}/5
                     </span>
@@ -185,7 +260,7 @@ const MovieDetails = () => {
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-foreground mb-3">Sinopse</h2>
               <p className="text-foreground leading-relaxed">
-                {movie.synopsis}
+                {getMovieProperty.synopsis()}
               </p>
             </div>
 
@@ -196,12 +271,12 @@ const MovieDetails = () => {
                 Onde Assistir
               </h2>
               <div className="flex flex-wrap gap-2">
-                {movie.streamingPlatforms.map((platform) => (
+                {getMovieProperty.streamingPlatforms().map((platform) => (
                   <Badge key={platform} variant="outline" className="px-3 py-1">
                     {platform}
                   </Badge>
                 ))}
-                {movie.streamingPlatforms.length === 0 && (
+                {getMovieProperty.streamingPlatforms().length === 0 && (
                   <p className="text-muted-foreground text-sm">
                     Informações de streaming não disponíveis no momento
                   </p>
@@ -218,7 +293,7 @@ const MovieDetails = () => {
               <div>
                 <h3 className="text-lg font-semibold text-foreground mb-3">Elenco Principal</h3>
                 <div className="space-y-1">
-                  {movie.cast.map((actor, index) => (
+                  {getMovieProperty.cast().map((actor, index) => (
                     <p key={index} className="text-muted-foreground">
                       {actor}
                     </p>
