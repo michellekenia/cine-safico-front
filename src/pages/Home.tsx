@@ -1,5 +1,6 @@
 // Components
 import MovieCard from "@/components/shared/MovieCard";
+import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Play } from "lucide-react";
 
@@ -11,11 +12,10 @@ import { useEffect, useState } from "react";
 // Interface
 import { GenreSections, HomeMovies } from "@/shared/interfaces/home.interface";
 
-// Api
 import {
   getHighLightsMovies,
   getGenresMovies,
-} from "../shared/api/home-movies";
+} from "@/shared/api/home-movies";
 
 const Home = () => {
   const [highlightMovies, setHighlightMovies] = useState<HomeMovies[]>([]);
@@ -50,11 +50,11 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {isLoading ? (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-2xl font-semibold text-accent">
-            Carregando filmes...
-          </div>
-        </div>
+        <Loader 
+          message="Carregando filmes em destaque..." 
+          size="lg" 
+          variant="cinematic" 
+        />
       ) : error ? (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-2xl font-semibold text-red-500">{error}</div>
@@ -104,6 +104,7 @@ const Home = () => {
                     key={movie.slug}
                     className="min-w-[200px] md:min-w-[250px]"
                   >
+                    {/* Passamos o slug explicitamente para garantir navegação via API */}
                     <MovieCard movie={movie} />
                   </div>
                 ))}
@@ -126,6 +127,7 @@ const Home = () => {
                 <div className="genre-scroll">
                   {movies.map((movie) => (
                     <div key={movie.slug} className="min-w-[200px] md:min-w-[250px]">
+                      {/* Garantindo que navegamos para a rota usando slug da API */}
                       <MovieCard movie={movie} />
                     </div>
                   ))}
