@@ -1,5 +1,6 @@
 // Components
 import MovieCard from "@/components/shared/MovieCard";
+import Loader from "@/components/shared/Loader";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Play } from "lucide-react";
 
@@ -50,11 +51,11 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {isLoading ? (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-2xl font-semibold text-accent">
-            Carregando filmes...
-          </div>
-        </div>
+        <Loader 
+          message="Carregando filmes em destaque..." 
+          size="lg" 
+          variant="cinematic" 
+        />
       ) : error ? (
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-2xl font-semibold text-red-500">{error}</div>

@@ -29,9 +29,10 @@ const MovieCard = ({ movie, showGenre = false }: MovieCardProps) => {
   };
 
   return (
-    <Link to={`/filme/${movie.slug}`} className="group">
-      <div className="movie-card bg-card rounded-lg overflow-hidden">
-        <div className="relative aspect-[2/3] overflow-hidden">
+    <Link to={`/filme/${movie.slug}`} className="group h-full">
+      <div className="movie-card bg-card rounded-lg overflow-hidden h-full flex flex-col">
+        {/* Poster Section - Fixed Height */}
+        <div className="relative aspect-[2/3] overflow-hidden flex-shrink-0">
           <img
             src={movie.posterImage || movie.poster}
             alt={`Poster do filme ${movie.title}`}
@@ -39,27 +40,30 @@ const MovieCard = ({ movie, showGenre = false }: MovieCardProps) => {
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          
-          {/* Venus symbol overlay */}
-          <div className="venus-symbol absolute top-2 right-2 text-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-300" />
         </div>
         
-        <div className="p-4">
-          <h3 className="font-semibold text-lg text-foreground mb-2 line-clamp-2 group-hover:text-accent transition-colors">
-            {movie.title}
-          </h3>
+        {/* Content Section - Flexible Height with Fixed Structure */}
+        <div className="p-4 flex flex-col flex-1">
+          {/* Title - Fixed Height Container */}
+          <div className="h-14 mb-3 flex items-start">
+            <h3 className="font-semibold text-lg text-foreground line-clamp-2 group-hover:text-accent transition-colors leading-tight">
+              {movie.title}
+            </h3>
+          </div>
           
-          <div className="flex items-center space-x-1 mb-2">
+          {/* Rating Section - Fixed Height */}
+          <div className="h-6 flex items-center space-x-1 mb-3">
             {renderStars(movie.rating)}
             <span className="text-sm text-muted-foreground ml-2">
               ({movie.rating})
             </span>
           </div>
           
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>{movie.releaseDate || movie.year}</span>
+          {/* Footer Section - Fixed Height */}
+          <div className="flex items-center justify-between text-sm text-muted-foreground mt-auto">
+            <span className="truncate">{movie.releaseDate || movie.year}</span>
             {showGenre && movie.genre?.length > 0 && (
-              <span className="text-xs bg-muted px-2 py-1 rounded">
+              <span className="text-xs bg-muted px-2 py-1 rounded flex-shrink-0 ml-2">
                 {movie.genre[0]}
               </span>
             )}

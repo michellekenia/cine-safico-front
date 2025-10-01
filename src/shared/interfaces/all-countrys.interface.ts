@@ -1,11 +1,11 @@
-export interface GenreItem {
+export interface Country {
   slug: string;
   nome: string;
   nomePt: string;
   count: number;
 }
 
-export interface GenresResponse {
-  items: GenreItem[];
+export interface CountriesResponse {
+  items: Country[];
   total: number;
 }
