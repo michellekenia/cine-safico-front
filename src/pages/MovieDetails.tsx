@@ -4,15 +4,12 @@ import { getMovieBySlug } from "@/shared/api/movie-details";
 import { MovieDetail } from "@/shared/interfaces/movies-details.interface";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Heart, Calendar, Clock, User, Tv, Loader2 } from "lucide-react";
+import { ArrowLeft, Heart, Calendar, Clock, Tv, Loader2 } from "lucide-react";
 
 
 const MovieDetails = () => {
   const { id: slugOrId } = useParams();
   const navigate = useNavigate();
-  const [userRating, setUserRating] = useState<number>(0);
-  const [hoverRating, setHoverRating] = useState<number>(0);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
   
   // Estados para API
   const [movie, setMovie] = useState<MovieDetail | null>(null);
@@ -102,26 +99,27 @@ const MovieDetails = () => {
     );
   }
 
+  // Função para avaliação própria - será implementada posteriormente
+  /*
   const handleRatingClick = (rating: number) => {
     setUserRating(rating);
     setIsEditing(false);
     // Here you would typically save the rating to a backend
     console.log(`Rating saved: ${rating}/5 for movie ${movie.title}`);
   };
+  */
 
+  // Versão simplificada apenas para avaliação geral
   const renderRatingHearts = (rating: number, isInteractive = false) => {
     const hearts = [];
     for (let i = 1; i <= 5; i++) {
-      const filled = i <= (isInteractive ? (hoverRating || userRating) : Math.floor(rating));
+      const filled = i <= Math.floor(rating);
       hearts.push(
         <Heart
           key={i}
           className={`w-6 h-6 transition-all duration-200 ${
             filled ? "text-accent fill-accent" : "text-muted-foreground"
-          } ${isInteractive ? "cursor-pointer hover:scale-110 hover:text-accent" : ""}`}
-          onClick={isInteractive ? () => handleRatingClick(i) : undefined}
-          onMouseEnter={isInteractive ? () => setHoverRating(i) : undefined}
-          onMouseLeave={isInteractive ? () => setHoverRating(0) : undefined}
+          }`}
         />
       );
     }
@@ -144,14 +142,23 @@ const MovieDetails = () => {
         {/* Movie Header */}
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
           {/* Poster */}
-          <div className="lg:col-span-1">
-            <div className="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-elegant">
+          <div className="lg:col-span-1 flex flex-col">
+            <div className="relative aspect-[2/3] rounded-2xl overflow-hidden shadow-elegant mb-4">
               <img
                 src={getMovieProperty.poster()}
                 alt={`Poster do filme ${movie.title}`}
                 className="w-full h-full object-cover"
               />
               <div className="geometric-accent absolute top-4 right-4" />
+            </div>
+            <div className="mt-6 flex justify-center">
+              <Button 
+                size="lg" 
+                className="btn-primary"
+                onClick={() => navigate("/filmes")}
+              >
+                Explorar Mais Filmes
+              </Button>
             </div>
           </div>
 
@@ -174,7 +181,7 @@ const MovieDetails = () => {
             </div>
 
             {/* Movie Meta */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               <div className="flex items-center text-muted-foreground">
                 <Calendar className="w-4 h-4 mr-2" />
                 <span>{getMovieProperty.year()}</span>
@@ -182,10 +189,6 @@ const MovieDetails = () => {
               <div className="flex items-center text-muted-foreground">
                 <Clock className="w-4 h-4 mr-2" />
                 <span>{movie.duration}</span>
-              </div>
-              <div className="flex items-center text-muted-foreground">
-                <User className="w-4 h-4 mr-2" />
-                <span>{movie.director}</span>
               </div>
             </div>
 
@@ -203,7 +206,7 @@ const MovieDetails = () => {
                 </div>
               </div>
 
-              {/* User Rating */}
+              {/* User Rating - será implementado posteriormente
               <div>
                 <p className="text-sm text-muted-foreground mb-2">
                   Sua Avaliação
@@ -254,6 +257,7 @@ const MovieDetails = () => {
                   </div>
                 )}
               </div>
+              */}
             </div>
 
             {/* Synopsis */}
@@ -284,35 +288,18 @@ const MovieDetails = () => {
               </div>
             </div>
 
-            {/* Cast & Crew */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-3">Direção</h3>
-                <p className="text-muted-foreground">{movie.director}</p>
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground mb-3">Elenco Principal</h3>
-                <div className="space-y-1">
-                  {getMovieProperty.cast().map((actor, index) => (
-                    <p key={index} className="text-muted-foreground">
-                      {actor}
-                    </p>
-                  ))}
-                </div>
-              </div>
+            {/* Director */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-foreground mb-3">Direção</h3>
+              <p className="text-muted-foreground">{movie.director}</p>
             </div>
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons - Removido botão duplicado */}
         <div className="flex flex-wrap gap-4 justify-center">
-          <Button 
-            size="lg" 
-            className="btn-primary"
-            onClick={() => navigate("/filmes")}
-          >
-            Explorar Mais Filmes
-          </Button>
+          {/* Botão "Explorar Mais Filmes" foi movido para abaixo do poster */}
+          {/* Botão "Sugerir Correção" será implementado posteriormente
           <Button 
             variant="outline" 
             size="lg"
@@ -320,6 +307,7 @@ const MovieDetails = () => {
           >
             Sugerir Correção
           </Button>
+          */}
         </div>
       </div>
     </div>
