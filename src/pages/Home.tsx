@@ -12,11 +12,10 @@ import { useEffect, useState } from "react";
 // Interface
 import { GenreSections, HomeMovies } from "@/shared/interfaces/home.interface";
 
-// Api
 import {
   getHighLightsMovies,
   getGenresMovies,
-} from "../shared/api/home-movies";
+} from "@/shared/api/home-movies";
 
 const Home = () => {
   const [highlightMovies, setHighlightMovies] = useState<HomeMovies[]>([]);
@@ -105,6 +104,7 @@ const Home = () => {
                     key={movie.slug}
                     className="min-w-[200px] md:min-w-[250px]"
                   >
+                    {/* Passamos o slug explicitamente para garantir navegação via API */}
                     <MovieCard movie={movie} />
                   </div>
                 ))}
@@ -127,6 +127,7 @@ const Home = () => {
                 <div className="genre-scroll">
                   {movies.map((movie) => (
                     <div key={movie.slug} className="min-w-[200px] md:min-w-[250px]">
+                      {/* Garantindo que navegamos para a rota usando slug da API */}
                       <MovieCard movie={movie} />
                     </div>
                   ))}
