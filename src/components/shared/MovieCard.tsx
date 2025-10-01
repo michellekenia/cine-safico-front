@@ -86,8 +86,7 @@ const MovieCard = ({ movie, showGenre = false }: MovieCardProps) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
-          {/* Venus symbol overlay */}
-          <div className="venus-symbol absolute top-2 right-2 text-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-300" />
+          {/* Removido Venus symbol overlay */}
         </div>
         
         <div className="p-4">

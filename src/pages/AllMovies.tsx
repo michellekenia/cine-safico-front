@@ -284,7 +284,7 @@ const AllMovies = () => {
           </>
         ) : (
           <div className="text-center py-12">
-            <div className="venus-symbol text-4xl mb-4 opacity-20" />
+            {/* Removido Venus symbol */}
             <h3 className="text-xl font-semibold text-foreground mb-2">
               Nenhum filme encontrado
             </h3>

@@ -6,7 +6,7 @@ const About = () => {
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="venus-symbol text-6xl mb-6 opacity-30" />
+          {/* Removido Venus symbol */}
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
             Sobre o Cine Sáfico
           </h1>

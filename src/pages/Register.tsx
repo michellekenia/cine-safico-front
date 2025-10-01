@@ -232,7 +232,7 @@ const Register = () => {
                 </Link>
               </p>
               
-              <div className="venus-symbol text-2xl opacity-20" />
+              {/* Removido Venus symbol */}
             </div>
           </CardContent>
         </Card>

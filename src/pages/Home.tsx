@@ -64,7 +64,7 @@ const Home = () => {
           <section className="relative h-[70vh] flex items-center justify-center hero-gradient">
             <div className="absolute inset-0 bg-black/30" />
             <div className="relative z-10 text-center px-4">
-              <div className="venus-symbol text-6xl mb-4 opacity-20" />
+              {/* Removido Venus symbol */}
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
                 Cine Sáfico
               </h1>

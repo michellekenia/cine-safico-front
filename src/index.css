@@ -120,60 +120,60 @@
 }
 
 @layer components {
-  /* Geometric Accents - Inspired by Venus Symbol */
+  /* Geometric Accents - Inspirado no símbolo feminino/Venus */
   .geometric-accent {
-    @apply w-8 h-8 relative opacity-20;
+    @apply w-8 h-8 relative opacity-30;
   }
   
   .geometric-accent::before,
   .geometric-accent::after {
     content: "";
-    @apply absolute w-6 h-6 border-2 border-accent rounded-full;
+    @apply absolute border-2 border-accent rounded-full transition-all duration-300;
   }
   
   .geometric-accent::before {
-    @apply top-0 left-0;
+    @apply w-7 h-7 top-0 left-0;
   }
   
   .geometric-accent::after {
-    @apply top-2 left-2;
+    @apply w-5 h-5 top-3 left-3;
   }
 
   .geometric-accent-small {
-    @apply w-6 h-6 relative opacity-20;
+    @apply w-6 h-6 relative opacity-30;
   }
   
   .geometric-accent-small::before,
   .geometric-accent-small::after {
     content: "";
-    @apply absolute w-4 h-4 border-2 border-accent rounded-full;
+    @apply absolute border-2 border-accent rounded-full transition-all duration-300;
   }
   
   .geometric-accent-small::before {
-    @apply top-0 left-0;
+    @apply w-5 h-5 top-0 left-0;
   }
   
   .geometric-accent-small::after {
-    @apply top-1 left-1;
+    @apply w-3.5 h-3.5 top-2 left-2;
   }
 
-  /* Legacy venus-symbol for backward compatibility */
+  /* Venus symbol - dois círculos sobrepostos inspirados no símbolo feminino */
   .venus-symbol {
-    @apply w-6 h-6 relative opacity-20;
+    @apply w-6 h-6 relative opacity-30;
   }
   
   .venus-symbol::before,
   .venus-symbol::after {
     content: "";
-    @apply absolute w-4 h-4 border-2 border-accent rounded-full;
+    @apply absolute border-2 border-accent rounded-full transition-all duration-300;
   }
   
   .venus-symbol::before {
-    @apply top-0 left-0;
+    @apply w-5 h-5 top-0 left-0;
   }
   
   .venus-symbol::after {
-    @apply top-1 left-1;
+    @apply w-4 h-4 top-1.5 left-1.5;
   }
 
   /* Hero Section Styles */
