@@ -213,23 +213,29 @@ const Register = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
-              <Button
+              {/* Submit Button - comentado pois o registro não será implementado agora */}
+              {/* <Button
                 type="submit"
                 className="w-full btn-primary"
                 disabled={isLoading}
               >
                 {isLoading ? "Criando conta..." : "Criar Conta"}
-              </Button>
+              </Button> */}
+              
+              <div className="w-full py-3 text-center bg-muted/30 rounded-lg">
+                Funcionalidade de registro será implementada em breve
+              </div>
             </form>
 
             {/* Footer */}
             <div className="mt-6 text-center space-y-4">
               <p className="text-sm text-muted-foreground">
-                Já tem uma conta?{" "}
+                {/* Login link comentado pois não será implementado agora */}
+                {/* Já tem uma conta?{" "}
                 <Link to="/login" className="text-accent hover:underline font-medium">
                   Faça login aqui
-                </Link>
+                </Link> */}
+                Funcionalidade de login/registro será implementada em breve.
               </p>
               
               {/* Removido Venus symbol */}
