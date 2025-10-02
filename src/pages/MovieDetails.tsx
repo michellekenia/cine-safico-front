@@ -193,7 +193,6 @@ const MovieDetails = () => {
     ) : !movie ? (
       // Filme não encontrado
       <div className="text-center max-w-md mx-auto">
-        <div className="venus-symbol text-4xl mb-6 opacity-20" />
         <h1 className="text-2xl font-bold text-foreground mb-2">Filme não encontrado</h1>
         <p className="text-muted-foreground mb-4">
           Não foi possível encontrar um filme com o identificador "{slugOrId}".
@@ -271,7 +270,7 @@ const MovieDetails = () => {
                 alt={`Poster do filme ${movie.title}`}
                 className="w-full h-full object-cover"
               />
-              <div className="geometric-accent absolute top-4 right-4" />
+          
             </div>
             <div className="mt-6 flex justify-center">
               <Button 
@@ -292,7 +291,7 @@ const MovieDetails = () => {
               <h1 className="text-4xl md:text-5xl font-bold text-primary">
                 {movie.title}
               </h1>
-              <div className="geometric-accent-small" />
+      
             </div>
 
             {/* Genres */}
@@ -481,7 +480,6 @@ const MovieDetails = () => {
           </div>
         </div>
 
-        {/* Action Buttons - Removido botão duplicado */}
         <div className="flex flex-wrap gap-4 justify-center">
           {/* Botão "Explorar Mais Filmes" foi movido para abaixo do poster */}
           {/* Botão "Sugerir Correção" será implementado posteriormente
