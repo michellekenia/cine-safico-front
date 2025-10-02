@@ -6,7 +6,6 @@ const About = () => {
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="venus-symbol text-6xl mb-6 opacity-30" />
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
             Sobre o Cine Sáfico
           </h1>
@@ -62,23 +61,23 @@ const About = () => {
                 <h3 className="text-2xl font-bold mb-4">Nossos Valores</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start">
-                    <span className="text-white mr-2">⚢</span>
+                    <span className="text-accent mr-2">•</span>
                     <span>Representação autêntica e diversa</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-white mr-2">⚢</span>
+                    <span className="text-accent mr-2">•</span>
                     <span>Inclusão e respeito à diversidade</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-white mr-2">⚢</span>
+                    <span className="text-accent mr-2">•</span>
                     <span>Qualidade cinematográfica</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-white mr-2">⚢</span>
+                    <span className="text-accent mr-2">•</span>
                     <span>Comunidade e conexão</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-white mr-2">⚢</span>
+                    <span className="text-accent mr-2">•</span>
                     <span>Transformação social através da arte</span>
                   </li>
                 </ul>
@@ -96,12 +95,6 @@ const About = () => {
               cinematográficas e constrói um futuro com mais representação sáfica no cinema.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="mailto:saficocine@gmail.com" 
-                className="btn-primary inline-flex items-center justify-center"
-              >
-                Entre em Contato
-              </a>
               <Link 
                 to="/filmes" 
                 className="btn-secondary inline-flex items-center justify-center"

@@ -13,7 +13,7 @@ const Footer = () => {
               Entre em contato: 
               <a 
                 href="mailto:saficocine@gmail.com" 
-                className="text-accent hover:underline ml-1"
+                className="text-white hover:underline ml-1"
               >
                 saficocine@gmail.com
               </a>

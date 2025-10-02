@@ -38,17 +38,18 @@ const Header = () => {
             </Link>
           </nav>
 
-          {/* Login Button */}
-          <Link to="/login">
+          {/* Login Button - login ainda não será implementado */}
+          {/* <Link to="/login">
             <Button variant="outline" size="sm" className="font-medium">
               Entrar
             </Button>
-          </Link>
+          </Link> */}
 
           {/* Mobile Navigation */}
           <nav className="md:hidden flex items-center space-x-4">
             <Link to="/filmes" className="nav-link text-sm">Filmes</Link>
             <Link to="/sobre" className="nav-link text-sm">Sobre</Link>
+            {/* <Link to="/login" className="nav-link text-sm">Entrar</Link> */}
           </nav>
         </div>
       </div>
