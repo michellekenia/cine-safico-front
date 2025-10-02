@@ -2,9 +2,13 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import MovieCard from '@/components/shared/MovieCard';
 import { MovieListItem } from '@/shared/interfaces/all-movies.interface';
+import { HomeMovies } from '@/shared/interfaces/home.interface';
+
+// União de tipos para aceitar tanto MovieListItem quanto HomeMovies
+type MovieProp = MovieListItem | HomeMovies;
 
 interface MovieCardWithStateProps {
-  movie: MovieListItem;
+  movie: MovieProp;
   showGenre?: boolean;
 }
 
@@ -16,6 +20,17 @@ interface MovieCardWithStateProps {
 const MovieCardWithState: React.FC<MovieCardWithStateProps> = ({ movie, showGenre }) => {
   const location = useLocation();
   
+  // Função auxiliar para obter o slug do filme de forma segura
+  const getSlug = (): string => {
+    if ('slug' in movie && movie.slug) {
+      return movie.slug;
+    }
+    if ('id' in movie) {
+      return String(movie.id);
+    }
+    return '';
+  };
+  
   // Armazenamos a informação necessária para voltar à página com os filtros corretos
   const navigationState = {
     from: location.pathname + location.search,
@@ -25,7 +40,7 @@ const MovieCardWithState: React.FC<MovieCardWithStateProps> = ({ movie, showGenr
   
   return (
     <Link 
-      to={`/filme/${movie.slug}`}
+      to={`/filme/${getSlug()}`}
       state={navigationState}
       className="group h-full"
     >
