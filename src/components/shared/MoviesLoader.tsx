@@ -126,7 +126,7 @@ const MoviesLoader = ({
               <div className="h-full bg-gradient-to-r from-primary to-accent rounded-full animate-pulse" 
                    style={{ 
                      width: "100%",
-                     animation: "progress 3s ease-in-out infinite"
+                     animation: "progress-slide 3s ease-in-out infinite"
                    }} 
               />
             </div>
@@ -159,13 +159,7 @@ const MoviesLoader = ({
           </div>
         )}
 
-        <style jsx>{`
-          @keyframes progress {
-            0% { transform: translateX(-100%); }
-            50% { transform: translateX(0%); }
-            100% { transform: translateX(100%); }
-          }
-        `}</style>
+        {/* A animação de progresso é controlada pelo Tailwind e CSS global */}
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { LinkBadge } from "@/components/ui/link-badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowLeft, Heart, Calendar, Clock, Tv } from "lucide-react";
+import Loader from "@/components/shared/Loader";
 
 
 const MovieDetails = () => {
@@ -110,14 +111,27 @@ const MovieDetails = () => {
     cast: () => [] 
   };
 
-  // Componente simplificado para navegação quando não há filme
-  const renderFallback = () => {
-    // Se estiver carregando, retorna nada
-    if (isLoading) return null;
-    
-    // Se houver erro ou filme não encontrado, mostra apenas botões de navegação
+  // Se estiver carregando, mostra o loader
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center py-8 px-4">
+      <div className="min-h-screen flex flex-col items-center justify-center py-8 px-4">
+        <Loader 
+          message="Carregando detalhes do filme..." 
+          variant="cinematic" 
+          size="lg" 
+        />
+      </div>
+    );
+  }
+  
+  // Se houver erro ou filme não encontrado, mostra mensagem de erro e botões de navegação
+  if (error || !movie) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center py-8 px-4">
+        <div className="mb-6 text-center">
+          <div className="text-xl font-bold text-primary mb-2">Ops! Não foi possível encontrar este filme</div>
+          {error && <p className="text-muted-foreground">{error}</p>}
+        </div>
         <div className="flex gap-4 justify-center">
           <Button variant="outline" onClick={() => navigate(-1)}>
             <ArrowLeft className="mr-2 h-4 w-4" />
@@ -129,10 +143,6 @@ const MovieDetails = () => {
         </div>
       </div>
     );
-  };
-
-  if (isLoading || error || !movie) {
-    return renderFallback();
   }
 
   // Função para avaliação própria - será implementada posteriormente
