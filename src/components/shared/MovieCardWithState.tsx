@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import MovieCard from '@/components/shared/MovieCard';
 import { MovieListItem } from '@/shared/interfaces/all-movies.interface';
 import { HomeMovies } from '@/shared/interfaces/home.interface';
+import { Heart } from "lucide-react";
 
 // União de tipos para aceitar tanto MovieListItem quanto HomeMovies
 type MovieProp = MovieListItem | HomeMovies;
@@ -29,6 +30,27 @@ const MovieCardWithState: React.FC<MovieCardWithStateProps> = ({ movie, showGenr
       return String(movie.id);
     }
     return '';
+  };
+  
+  // Função para renderizar as estrelas de rating
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Heart key={i} className="w-4 h-4 fill-accent text-accent" />);
+    }
+
+    if (hasHalfStar) {
+      stars.push(<Heart key="half" className="w-4 h-4 text-accent" />);
+    }
+
+    while (stars.length < 5) {
+      stars.push(<Heart key={`empty-${stars.length}`} className="w-4 h-4 text-muted-foreground" />);
+    }
+
+    return stars;
   };
   
   // Armazenamos a informação necessária para voltar à página com os filtros corretos
@@ -62,6 +84,20 @@ const MovieCardWithState: React.FC<MovieCardWithStateProps> = ({ movie, showGenr
             <h3 className="font-semibold text-lg text-foreground line-clamp-2 group-hover:text-accent transition-colors leading-tight">
               {movie.title}
             </h3>
+          </div>
+          
+          {/* Rating Section - Exibindo estrelas de rating */}
+          <div className="h-6 flex items-center space-x-1 mb-3">
+            {('rating' in movie && movie.rating) ? 
+              renderStars(typeof movie.rating === 'string' ? parseFloat(movie.rating) : Number(movie.rating)) 
+              : renderStars(0)
+            }
+            <span className="text-sm text-muted-foreground ml-2">
+              {('rating' in movie && movie.rating) ? 
+                `(${movie.rating})` 
+                : "(0)"
+              }
+            </span>
           </div>
           
           <div className="mt-auto">
