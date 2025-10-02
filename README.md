@@ -2,7 +2,7 @@
 
 CINE-SAFICO é uma aplicação web dedicada à promoção e celebração do cinema LBT feminino, com foco em histórias autênticas e representação genuína.
 
-![Cine-Safico Screenshot](https://placeholder.svg) <!-- Substitua por um screenshot real da aplicação -->
+![Cine-Safico Screenshot](docs/cine-safico.png)
 
 ## 📋 Sumário
 - [Visão Geral](#visão-geral)
@@ -161,4 +161,4 @@ A aplicação consome dados da API CINE-SAFICO:
 
 ---
 
-Criado com 💜 para a comunidade LBT | [Website](https://cine-safico.vercel.app)
+Criado com 💜 para a comunidade LBT | [Website](https://cine-safico-front.vercel.app/)
