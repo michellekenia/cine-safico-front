@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { getMovieBySlug } from "@/shared/api/movie-details";
 import { MovieDetail } from "@/shared/interfaces/movies-details.interface";
@@ -13,11 +13,34 @@ import Loader from "@/components/shared/Loader";
 const MovieDetails = () => {
   const { id: slugOrId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   
   // Estados para API
   const [movie, setMovie] = useState<MovieDetail | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  
+  /**
+   * Função para lidar com o botão voltar preservando o estado de filtros
+   * Se houver estado de navegação com a origem da página de filmes, 
+   * volta para essa página com os filtros aplicados anteriormente
+   */
+  const handleBack = () => {
+    if (location.state?.fromFilmes && location.state.from) {
+      // Se vier da página de filmes com filtros, mantém os filtros
+      const basePath = location.state.from.split('?')[0];
+      const filters = location.state.filterPath || '';
+      return navigate(`${basePath}${filters}`, { replace: true });
+    } 
+    
+    if (location.state?.from) {
+      // Se tiver uma origem definida mas não for da página de filmes
+      return navigate(location.state.from);
+    }
+    
+    // Fallback: volta para a página anterior no histórico
+    navigate(-1);
+  };
   
   const fetchMovieDetails = useCallback(async () => {
     if (!slugOrId) return;
@@ -27,7 +50,6 @@ const MovieDetails = () => {
     
     try {
       const slug = slugOrId.toString();
-      console.log("Buscando filme com slug:", slug);
       
       const timeoutPromise = new Promise<MovieDetail>((_, reject) => {
         setTimeout(() => reject(new Error('Tempo limite excedido. O servidor pode estar sobrecarregado.')), 40000);
@@ -133,11 +155,18 @@ const MovieDetails = () => {
           {error && <p className="text-muted-foreground">{error}</p>}
         </div>
         <div className="flex gap-4 justify-center">
-          <Button variant="outline" onClick={() => navigate(-1)}>
+          <Button variant="outline" onClick={handleBack}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar
           </Button>
-          <Button variant="default" onClick={() => navigate("/filmes")}>
+          <Button variant="default" onClick={() => {
+            // Se tem estado de filmes, usa a lógica do handleBack
+            if (location.state?.fromFilmes && location.state.from) {
+              handleBack();
+            } else {
+              navigate("/filmes");
+            }
+          }}>
             Ver filmes
           </Button>
         </div>
@@ -178,7 +207,7 @@ const MovieDetails = () => {
         {/* Back Button */}
         <Button
           variant="outline"
-          onClick={() => navigate(-1)}
+          onClick={handleBack}
           className="mb-6"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -202,7 +231,7 @@ const MovieDetails = () => {
                 size="lg" 
                 variant="default"
                 className="bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
-                onClick={() => navigate("/filmes")}
+                onClick={() => navigate("/filmes", { replace: true, state: { clearFilters: true } })}
                 aria-label="Explorar mais filmes com temática lésbica"
               >
                 Explorar Mais Filmes

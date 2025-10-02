@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { getAllMovies } from "@/shared/api/all-movies";
 import { getAllGenres } from "@/shared/api/all-genres";
@@ -13,7 +14,7 @@ import { GenresResponse } from "@/shared/interfaces/all-genres.interface";
 import { CountriesResponse } from "@/shared/interfaces/all-countrys.interface";
 import { AllLanguagesResponse } from "@/shared/interfaces/all-languages.interface";
 
-import MovieCard from "@/components/shared/MovieCard";
+import MovieCardWithState from "@/components/shared/MovieCardWithState";
 import MoviesLoader from "@/components/shared/MoviesLoader";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -45,15 +46,32 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 const AllMovies = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Função para extrair parâmetros da URL
+  const getUrlParams = () => {
+    const params = new URLSearchParams(location.search);
+    return {
+      page: params.get('page') ? Number(params.get('page')) : 1,
+      search: params.get('search') || "",
+      genre: params.get('genre') || "",
+      country: params.get('country') || "",
+      language: params.get('language') || "",
+    };
+  };
+  
+  // Inicializa estados com valores da URL
+  const urlParams = getUrlParams();
+  const [currentPage, setCurrentPage] = useState(urlParams.page);
   const [movies, setMovies] = useState<PaginatedMoviesResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(urlParams.search);
 
-  // Filter states
-  const [selectedGenre, setSelectedGenre] = useState<string>("");
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
-  const [selectedLanguage, setSelectedLanguage] = useState<string>("");
+  // Filter states inicializados com valores da URL
+  const [selectedGenre, setSelectedGenre] = useState<string>(urlParams.genre);
+  const [selectedCountry, setSelectedCountry] = useState<string>(urlParams.country);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(urlParams.language);
 
   const [availableGenres, setAvailableGenres] = useState<GenresResponse | null>(null);
   const [availableCountries, setAvailableCountries] = useState<CountriesResponse | null>(null);
@@ -116,6 +134,33 @@ const AllMovies = () => {
     selectedLanguage,
   ]);
 
+  // Sincroniza filtros com a URL
+  useEffect(() => {
+    // Se viermos da navegação de MovieDetails com clearFilters, não atualizamos a URL
+    if (location.state && location.state.clearFilters) {
+      // Limpa o estado para não afetar futuras navegações
+      navigate(location.pathname, { replace: true, state: {} });
+      return;
+    }
+    
+    // Constrói os parâmetros de URL com base nos filtros ativos
+    const params = new URLSearchParams();
+    
+    if (currentPage > 1) params.set('page', currentPage.toString());
+    if (searchTerm) params.set('search', searchTerm);
+    if (selectedGenre) params.set('genre', selectedGenre);
+    if (selectedCountry) params.set('country', selectedCountry);
+    if (selectedLanguage) params.set('language', selectedLanguage);
+    
+    // Atualiza a URL sem recarregar a página
+    const newUrl = `${location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
+    
+    // Apenas atualiza se a URL for diferente para evitar loops
+    if (newUrl !== `${location.pathname}${location.search}`) {
+      navigate(newUrl, { replace: true });
+    }
+  }, [currentPage, searchTerm, selectedGenre, selectedCountry, selectedLanguage, navigate, location.pathname, location.search, location.state]);
+
   const clearFilter = (filter: "genre" | "country" | "language") => {
     if (filter === "genre") setSelectedGenre("");
     if (filter === "country") setSelectedCountry("");
@@ -124,11 +169,15 @@ const AllMovies = () => {
   };
 
   const clearAllFilters = () => {
+    // Limpa todos os filtros
     setSelectedGenre("");
     setSelectedCountry("");
     setSelectedLanguage("");
     setSearchTerm("");
     setCurrentPage(1);
+    
+    // Atualiza a URL para remover todos os parâmetros
+    navigate("/filmes", { replace: true });
   };
 
   const hasActiveFilters = selectedGenre || selectedCountry || selectedLanguage || searchTerm;
@@ -481,7 +530,7 @@ const AllMovies = () => {
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6">
               {movies.data.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
+                <MovieCardWithState key={movie.id} movie={movie} />
               ))}
             </div>
 
