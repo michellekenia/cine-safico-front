@@ -28,7 +28,8 @@ export interface MoviesQueryParams {
   search?: string;    
   genre?: string;
   country?: string;
-  language?: string;        
+  language?: string;
+  platform?: string;              
   sortBy?: 'title' | 'releaseDate' | 'rating'; 
   sortOrder?: 'asc' | 'desc';                  
 }

@@ -5,6 +5,7 @@ import { getAllMovies } from "@/shared/api/all-movies";
 import { getAllGenres } from "@/shared/api/all-genres";
 import { getAllCountries } from "@/shared/api/all-countries";
 import { getAllLanguages } from "@/shared/api/all-languages";
+import { getAllStreamingPlatforms } from "@/shared/api/all-streaming";
 
 import {
   PaginatedMoviesResponse,
@@ -13,6 +14,7 @@ import {
 import { GenresResponse } from "@/shared/interfaces/all-genres.interface";
 import { CountriesResponse } from "@/shared/interfaces/all-countrys.interface";
 import { AllLanguagesResponse } from "@/shared/interfaces/all-languages.interface";
+import { StreamingPlatformsResponse } from "@/shared/interfaces/all-streaming.interface";
 
 import MovieCardWithState from "@/components/shared/MovieCardWithState";
 import MoviesLoader from "@/components/shared/MoviesLoader";
@@ -60,6 +62,7 @@ const AllMovies = () => {
       genre: params.get('genre') || "",
       country: params.get('country') || "",
       language: params.get('language') || "",
+      platform: params.get('platform') || "",
     };
   };
   
@@ -74,28 +77,54 @@ const AllMovies = () => {
   const [selectedGenre, setSelectedGenre] = useState<string>(urlParams.genre);
   const [selectedCountry, setSelectedCountry] = useState<string>(urlParams.country);
   const [selectedLanguage, setSelectedLanguage] = useState<string>(urlParams.language);
+  const [selectedPlatform, setSelectedPlatform] = useState<string>(urlParams.platform);
 
   const [availableGenres, setAvailableGenres] = useState<GenresResponse | null>(null);
   const [availableCountries, setAvailableCountries] = useState<CountriesResponse | null>(null);
   const [availableLanguages, setAvailableLanguages] = useState<AllLanguagesResponse | null>(null);
+  const [availablePlatforms, setAvailablePlatforms] = useState<StreamingPlatformsResponse | null>(null);
 
   const [isGenrePopoverOpen, setIsGenrePopoverOpen] = useState(false);
   const [isCountryPopoverOpen, setIsCountryPopoverOpen] = useState(false);
   const [isLanguagePopoverOpen, setIsLanguagePopoverOpen] = useState(false);
+  const [isPlatformPopoverOpen, setIsPlatformPopoverOpen] = useState(false);
 
   // Fetch data for filters
   useEffect(() => {
     const fetchFilterData = async () => {
       try {
-        const [genresData, countriesData, languagesData] = await Promise.all([
+        const [genresData, countriesData, languagesData, platformsData] = await Promise.all([
           getAllGenres(),
           getAllCountries(),
           getAllLanguages(),
+          getAllStreamingPlatforms(),
         ]);
 
-        setAvailableGenres(genresData);
-        setAvailableCountries(countriesData);
-        setAvailableLanguages(languagesData);
+        // Ordena todos os filtros alfabeticamente
+        const sortedGenres = {
+          ...genresData,
+          items: genresData.items.sort((a, b) => a.nomePt.localeCompare(b.nomePt, 'pt-BR'))
+        };
+        
+        const sortedCountries = {
+          ...countriesData,
+          items: countriesData.items.sort((a, b) => a.nomePt.localeCompare(b.nomePt, 'pt-BR'))
+        };
+        
+        const sortedLanguages = {
+          ...languagesData,
+          items: languagesData.items.sort((a, b) => a.nomePt.localeCompare(b.nomePt, 'pt-BR'))
+        };
+        
+        const sortedPlatforms = {
+          ...platformsData,
+          items: platformsData.items.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
+        };
+
+        setAvailableGenres(sortedGenres);
+        setAvailableCountries(sortedCountries);
+        setAvailableLanguages(sortedLanguages);
+        setAvailablePlatforms(sortedPlatforms);
       } catch (error) {
         console.error("Erro ao buscar dados para os filtros:", error);
       }
@@ -115,6 +144,7 @@ const AllMovies = () => {
           genre: selectedGenre,
           country: selectedCountry,
           language: selectedLanguage,
+          platform: selectedPlatform,
         };
 
         const data = await getAllMovies(queryParams);
@@ -134,6 +164,7 @@ const AllMovies = () => {
     selectedGenre,
     selectedCountry,
     selectedLanguage,
+    selectedPlatform,
   ]);
 
   // Sincroniza filtros com a URL
@@ -153,6 +184,7 @@ const AllMovies = () => {
     if (selectedGenre) params.set('genre', selectedGenre);
     if (selectedCountry) params.set('country', selectedCountry);
     if (selectedLanguage) params.set('language', selectedLanguage);
+    if (selectedPlatform) params.set('platform', selectedPlatform);
     
     // Atualiza a URL sem recarregar a página
     const newUrl = `${location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
@@ -161,12 +193,13 @@ const AllMovies = () => {
     if (newUrl !== `${location.pathname}${location.search}`) {
       navigate(newUrl, { replace: true });
     }
-  }, [currentPage, searchTerm, selectedGenre, selectedCountry, selectedLanguage, navigate, location.pathname, location.search, location.state]);
+  }, [currentPage, searchTerm, selectedGenre, selectedCountry, selectedLanguage, selectedPlatform, navigate, location.pathname, location.search, location.state]);
 
-  const clearFilter = (filter: "genre" | "country" | "language") => {
+  const clearFilter = (filter: "genre" | "country" | "language" | "platform") => {
     if (filter === "genre") setSelectedGenre("");
     if (filter === "country") setSelectedCountry("");
     if (filter === "language") setSelectedLanguage("");
+    if (filter === "platform") setSelectedPlatform("");
     setCurrentPage(1);
   };
 
@@ -175,6 +208,7 @@ const AllMovies = () => {
     setSelectedGenre("");
     setSelectedCountry("");
     setSelectedLanguage("");
+    setSelectedPlatform("");
     setSearchTerm("");
     setCurrentPage(1);
     
@@ -182,7 +216,7 @@ const AllMovies = () => {
     navigate("/filmes", { replace: true });
   };
 
-  const hasActiveFilters = selectedGenre || selectedCountry || selectedLanguage || searchTerm;
+  const hasActiveFilters = selectedGenre || selectedCountry || selectedLanguage || selectedPlatform || searchTerm;
 
   const renderActiveFilters = () => {
     const filters = [
@@ -210,6 +244,13 @@ const AllMovies = () => {
           (l) => l.slug === selectedLanguage
         )?.nomePt,
       },
+      {
+        type: "platform" as const,
+        value: selectedPlatform,
+        label: availablePlatforms?.items.find(
+          (p) => p.slug === selectedPlatform
+        )?.nome,
+      },
     ];
 
     return (
@@ -225,7 +266,8 @@ const AllMovies = () => {
                 <span className="font-medium">
                   {filter.type === "search" ? "Busca" : 
                    filter.type === "genre" ? "Gênero" :
-                   filter.type === "country" ? "País" : "Idioma"}:
+                   filter.type === "country" ? "País" :
+                   filter.type === "language" ? "Idioma" : "Plataforma"}:
                 </span>
                 <span>{filter.label || filter.value}</span>
                 <X
@@ -306,7 +348,7 @@ const AllMovies = () => {
               </div>
 
               {/* Filter Dropdowns */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* Genre Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">
@@ -486,6 +528,66 @@ const AllMovies = () => {
                     </PopoverContent>
                   </Popover>
                 </div>
+
+                {/* Platform Filter */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">
+                    Plataforma
+                  </label>
+                  <Popover
+                    open={isPlatformPopoverOpen}
+                    onOpenChange={setIsPlatformPopoverOpen}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={isPlatformPopoverOpen}
+                        className="w-full justify-between h-11"
+                      >
+                        {selectedPlatform
+                          ? availablePlatforms?.items.find(
+                              (platform) => platform.slug === selectedPlatform
+                            )?.nome
+                          : "Todas as plataformas"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar plataforma..." />
+                        <CommandList>
+                          <CommandEmpty>Nenhuma plataforma encontrada.</CommandEmpty>
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => {
+                                setSelectedPlatform("");
+                                setCurrentPage(1);
+                                setIsPlatformPopoverOpen(false);
+                              }}
+                            >
+                              Todas as plataformas
+                            </CommandItem>
+                            {availablePlatforms?.items.map((platform) => (
+                              <CommandItem
+                                key={platform.slug}
+                                onSelect={() => {
+                                  setSelectedPlatform(
+                                    selectedPlatform === platform.slug ? "" : platform.slug
+                                  );
+                                  setCurrentPage(1);
+                                  setIsPlatformPopoverOpen(false);
+                                }}
+                              >
+                                {platform.nome} ({platform.count})
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
               </div>
 
               {/* Active Filters */}
@@ -498,7 +600,7 @@ const AllMovies = () => {
                         Filtros ativos
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {[selectedGenre, selectedCountry, selectedLanguage, searchTerm].filter(Boolean).length} filtro(s)
+                        {[selectedGenre, selectedCountry, selectedLanguage, selectedPlatform, searchTerm].filter(Boolean).length} filtro(s)
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
