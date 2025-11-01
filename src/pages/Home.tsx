@@ -19,8 +19,11 @@ import {
   getGenresMovies,
 } from "@/shared/api/home-movies";
 import { getAllGenres } from "@/shared/api/all-genres";
+import useScrollToTop from "../hooks/useScrollToTop";
 
 const Home = () => {
+  useScrollToTop();
+
   const [highlightMovies, setHighlightMovies] = useState<HomeMovies[]>([]);
   const [genreSections, setGenreSections] = useState<GenreSections>({});
   const [genreSlugsMap, setGenreSlugsMap] = useState<Record<string, string>>({});
