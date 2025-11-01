@@ -44,10 +44,12 @@ import {
 } from "@/components/ui/popover";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import useScrollToTop from "../hooks/useScrollToTop";
 
 const AllMovies = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  useScrollToTop();
   
   // Função para extrair parâmetros da URL
   const getUrlParams = () => {
@@ -331,9 +333,7 @@ const AllMovies = () => {
                     </PopoverTrigger>
                     <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
                       <Command>
-                        <CommandInput placeholder="Buscar gênero..." />
                         <CommandList>
-                          <CommandEmpty>Nenhum gênero encontrado.</CommandEmpty>
                           <CommandGroup>
                             <CommandItem
                               onSelect={() => {

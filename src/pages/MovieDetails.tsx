@@ -8,12 +8,16 @@ import { LinkBadge } from "@/components/ui/link-badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ArrowLeft, Heart, Calendar, Clock, Tv } from "lucide-react";
 import Loader from "@/components/shared/Loader";
+import useScrollToTop from "../hooks/useScrollToTop";
 
 
 const MovieDetails = () => {
   const { id: slugOrId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  
+  // Scroll to top on mount
+  useScrollToTop();
   
   // Estados para API
   const [movie, setMovie] = useState<MovieDetail | null>(null);
