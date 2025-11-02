@@ -29,7 +29,10 @@ export interface MoviesQueryParams {
   genre?: string;
   country?: string;
   language?: string;
-  platform?: string;              
+  platform?: string;
+  year?: number;
+  yearFrom?: number;
+  yearTo?: number;              
   sortBy?: 'title' | 'releaseDate' | 'rating'; 
   sortOrder?: 'asc' | 'desc';                  
 }

@@ -6,6 +6,7 @@ import { getAllGenres } from "@/shared/api/all-genres";
 import { getAllCountries } from "@/shared/api/all-countries";
 import { getAllLanguages } from "@/shared/api/all-languages";
 import { getAllStreamingPlatforms } from "@/shared/api/all-streaming";
+import { getAllYears } from "@/shared/api/all-years";
 
 import {
   PaginatedMoviesResponse,
@@ -15,6 +16,7 @@ import { GenresResponse } from "@/shared/interfaces/all-genres.interface";
 import { CountriesResponse } from "@/shared/interfaces/all-countrys.interface";
 import { AllLanguagesResponse } from "@/shared/interfaces/all-languages.interface";
 import { StreamingPlatformsResponse } from "@/shared/interfaces/all-streaming.interface";
+import { YearResponse } from "@/shared/interfaces/all-years.interface";
 
 import MovieCardWithState from "@/components/shared/MovieCardWithState";
 import MoviesLoader from "@/components/shared/MoviesLoader";
@@ -63,6 +65,9 @@ const AllMovies = () => {
       country: params.get('country') || "",
       language: params.get('language') || "",
       platform: params.get('platform') || "",
+      year: params.get('year') ? Number(params.get('year')) : undefined,
+      yearFrom: params.get('yearFrom') ? Number(params.get('yearFrom')) : undefined,
+      yearTo: params.get('yearTo') ? Number(params.get('yearTo')) : undefined,
     };
   };
   
@@ -78,26 +83,32 @@ const AllMovies = () => {
   const [selectedCountry, setSelectedCountry] = useState<string>(urlParams.country);
   const [selectedLanguage, setSelectedLanguage] = useState<string>(urlParams.language);
   const [selectedPlatform, setSelectedPlatform] = useState<string>(urlParams.platform);
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(urlParams.year);
+  const [yearFrom, setYearFrom] = useState<number | undefined>(urlParams.yearFrom);
+  const [yearTo, setYearTo] = useState<number | undefined>(urlParams.yearTo);
 
   const [availableGenres, setAvailableGenres] = useState<GenresResponse | null>(null);
   const [availableCountries, setAvailableCountries] = useState<CountriesResponse | null>(null);
   const [availableLanguages, setAvailableLanguages] = useState<AllLanguagesResponse | null>(null);
   const [availablePlatforms, setAvailablePlatforms] = useState<StreamingPlatformsResponse | null>(null);
+  const [availableYears, setAvailableYears] = useState<YearResponse | null>(null);
 
   const [isGenrePopoverOpen, setIsGenrePopoverOpen] = useState(false);
   const [isCountryPopoverOpen, setIsCountryPopoverOpen] = useState(false);
   const [isLanguagePopoverOpen, setIsLanguagePopoverOpen] = useState(false);
   const [isPlatformPopoverOpen, setIsPlatformPopoverOpen] = useState(false);
+  const [isYearPopoverOpen, setIsYearPopoverOpen] = useState(false);
 
   // Fetch data for filters
   useEffect(() => {
     const fetchFilterData = async () => {
       try {
-        const [genresData, countriesData, languagesData, platformsData] = await Promise.all([
+        const [genresData, countriesData, languagesData, platformsData, yearsData] = await Promise.all([
           getAllGenres(),
           getAllCountries(),
           getAllLanguages(),
           getAllStreamingPlatforms(),
+          getAllYears(),
         ]);
 
         // Ordena todos os filtros alfabeticamente
@@ -120,11 +131,17 @@ const AllMovies = () => {
           ...platformsData,
           items: platformsData.items.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'))
         };
+        
+        const sortedYears = {
+          ...yearsData,
+          items: yearsData.items.sort((a, b) => b.year - a.year) // Ordena anos decrescente (mais recente primeiro)
+        };
 
         setAvailableGenres(sortedGenres);
         setAvailableCountries(sortedCountries);
         setAvailableLanguages(sortedLanguages);
         setAvailablePlatforms(sortedPlatforms);
+        setAvailableYears(sortedYears);
       } catch (error) {
         console.error("Erro ao buscar dados para os filtros:", error);
       }
@@ -145,6 +162,9 @@ const AllMovies = () => {
           country: selectedCountry,
           language: selectedLanguage,
           platform: selectedPlatform,
+          year: selectedYear,
+          yearFrom: yearFrom,
+          yearTo: yearTo,
         };
 
         const data = await getAllMovies(queryParams);
@@ -165,6 +185,9 @@ const AllMovies = () => {
     selectedCountry,
     selectedLanguage,
     selectedPlatform,
+    selectedYear,
+    yearFrom,
+    yearTo,
   ]);
 
   // Sincroniza filtros com a URL
@@ -185,6 +208,9 @@ const AllMovies = () => {
     if (selectedCountry) params.set('country', selectedCountry);
     if (selectedLanguage) params.set('language', selectedLanguage);
     if (selectedPlatform) params.set('platform', selectedPlatform);
+    if (selectedYear) params.set('year', selectedYear.toString());
+    if (yearFrom) params.set('yearFrom', yearFrom.toString());
+    if (yearTo) params.set('yearTo', yearTo.toString());
     
     // Atualiza a URL sem recarregar a página
     const newUrl = `${location.pathname}${params.toString() ? `?${params.toString()}` : ''}`;
@@ -193,13 +219,18 @@ const AllMovies = () => {
     if (newUrl !== `${location.pathname}${location.search}`) {
       navigate(newUrl, { replace: true });
     }
-  }, [currentPage, searchTerm, selectedGenre, selectedCountry, selectedLanguage, selectedPlatform, navigate, location.pathname, location.search, location.state]);
+  }, [currentPage, searchTerm, selectedGenre, selectedCountry, selectedLanguage, selectedPlatform, selectedYear, yearFrom, yearTo, navigate, location.pathname, location.search, location.state]);
 
-  const clearFilter = (filter: "genre" | "country" | "language" | "platform") => {
+  const clearFilter = (filter: "genre" | "country" | "language" | "platform" | "year" | "yearRange") => {
     if (filter === "genre") setSelectedGenre("");
     if (filter === "country") setSelectedCountry("");
     if (filter === "language") setSelectedLanguage("");
     if (filter === "platform") setSelectedPlatform("");
+    if (filter === "year") setSelectedYear(undefined);
+    if (filter === "yearRange") {
+      setYearFrom(undefined);
+      setYearTo(undefined);
+    }
     setCurrentPage(1);
   };
 
@@ -209,6 +240,9 @@ const AllMovies = () => {
     setSelectedCountry("");
     setSelectedLanguage("");
     setSelectedPlatform("");
+    setSelectedYear(undefined);
+    setYearFrom(undefined);
+    setYearTo(undefined);
     setSearchTerm("");
     setCurrentPage(1);
     
@@ -216,7 +250,7 @@ const AllMovies = () => {
     navigate("/filmes", { replace: true });
   };
 
-  const hasActiveFilters = selectedGenre || selectedCountry || selectedLanguage || selectedPlatform || searchTerm;
+  const hasActiveFilters = selectedGenre || selectedCountry || selectedLanguage || selectedPlatform || selectedYear || yearFrom || yearTo || searchTerm;
 
   const renderActiveFilters = () => {
     const filters = [
@@ -251,6 +285,22 @@ const AllMovies = () => {
           (p) => p.slug === selectedPlatform
         )?.nome,
       },
+      {
+        type: "year" as const,
+        value: selectedYear,
+        label: selectedYear ? selectedYear.toString() : undefined,
+      },
+      {
+        type: "yearRange" as const,
+        value: (yearFrom || yearTo) ? true : false,
+        label: yearFrom && yearTo 
+          ? `${yearFrom} - ${yearTo}` 
+          : yearFrom 
+            ? `A partir de ${yearFrom}` 
+            : yearTo 
+              ? `Até ${yearTo}` 
+              : undefined,
+      },
     ];
 
     return (
@@ -267,7 +317,10 @@ const AllMovies = () => {
                   {filter.type === "search" ? "Busca" : 
                    filter.type === "genre" ? "Gênero" :
                    filter.type === "country" ? "País" :
-                   filter.type === "language" ? "Idioma" : "Plataforma"}:
+                   filter.type === "language" ? "Idioma" : 
+                   filter.type === "platform" ? "Plataforma" :
+                   filter.type === "year" ? "Ano" : 
+                   filter.type === "yearRange" ? "Período" : "Filtro"}:
                 </span>
                 <span>{filter.label || filter.value}</span>
                 <X
@@ -333,7 +386,7 @@ const AllMovies = () => {
                 <label className="text-sm font-medium text-foreground">
                   Buscar por título
                 </label>
-                <div className="relative">
+                <div className="relative max-w-md">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input
                     placeholder="Digite o nome do filme..."
@@ -342,13 +395,13 @@ const AllMovies = () => {
                       setSearchTerm(e.target.value);
                       setCurrentPage(1);
                     }}
-                    className="pl-10 h-11"
+                    className="pl-10 h-10 w-full"
                   />
                 </div>
               </div>
 
               {/* Filter Dropdowns */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {/* Genre Filter */}
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">
@@ -580,6 +633,70 @@ const AllMovies = () => {
                                 }}
                               >
                                 {platform.nome} ({platform.count})
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                {/* Year Filter */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-foreground">
+                    Ano
+                  </label>
+                  <Popover
+                    open={isYearPopoverOpen}
+                    onOpenChange={setIsYearPopoverOpen}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={isYearPopoverOpen}
+                        className="w-full justify-between h-11"
+                      >
+                        {selectedYear
+                          ? selectedYear.toString()
+                          : yearFrom || yearTo
+                          ? `${yearFrom || '...'} - ${yearTo || '...'}`
+                          : "Todos os anos"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar ano..." />
+                        <CommandList>
+                          <CommandEmpty>Nenhum ano encontrado.</CommandEmpty>
+                          <CommandGroup>
+                            <CommandItem
+                              onSelect={() => {
+                                setSelectedYear(undefined);
+                                setYearFrom(undefined);
+                                setYearTo(undefined);
+                                setCurrentPage(1);
+                                setIsYearPopoverOpen(false);
+                              }}
+                            >
+                              Todos os anos
+                            </CommandItem>
+                            {availableYears?.items.map((yearItem) => (
+                              <CommandItem
+                                key={yearItem.year}
+                                onSelect={() => {
+                                  setSelectedYear(
+                                    selectedYear === yearItem.year ? undefined : yearItem.year
+                                  );
+                                  setYearFrom(undefined);
+                                  setYearTo(undefined);
+                                  setCurrentPage(1);
+                                  setIsYearPopoverOpen(false);
+                                }}
+                              >
+                                {yearItem.year} ({yearItem.count})
                               </CommandItem>
                             ))}
                           </CommandGroup>
