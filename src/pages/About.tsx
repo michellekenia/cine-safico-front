@@ -97,7 +97,7 @@ As informações sobre produções sáficas ainda são insuficientes e dispersas
             {/* Michelle Kênia */}
             <div className="flex flex-col items-center gap-2 mb-4 bg-muted/40 rounded-xl shadow p-6 text-center transition-transform duration-200 hover:scale-105 hover:shadow-2xl border border-[#e5d8f6]">
               <div className="w-24 h-24 rounded-full mb-3 flex items-center justify-center overflow-hidden border-4 border-[#b983ff] bg-muted">
-                <img src="/team/michelle.jpg" alt="Michelle Kênia" className="w-full h-full object-cover rounded-full" />
+                <img src="/team/michelle.jpeg" alt="Michelle Kênia" className="w-full h-full object-cover rounded-full" />
               </div>
               <div className="flex flex-col items-center">
                 <strong className="text-center">
@@ -120,7 +120,7 @@ As informações sobre produções sáficas ainda são insuficientes e dispersas
             {/* Cristiano Pereira */}
             <div className="flex flex-col items-center gap-2 mb-4 bg-muted/40 rounded-xl shadow p-6 text-center transition-transform duration-200 hover:scale-105 hover:shadow-2xl border border-[#e5d8f6]">
               <div className="w-24 h-24 rounded-full mb-3 flex items-center justify-center overflow-hidden border-4 border-[#b983ff] bg-muted">
-                <img src="/team/cris.jpg" alt="Cristiano Pereira" className="w-full h-full object-cover rounded-full" />
+                <img src="/team/cris.jpeg" alt="Cristiano Pereira" className="w-full h-full object-cover rounded-full" />
               </div>
               <div className="flex flex-col items-center">
                 <strong className="text-center">
@@ -143,7 +143,7 @@ As informações sobre produções sáficas ainda são insuficientes e dispersas
             {/* Tali */}
             <div className="flex flex-col items-center gap-2 mb-4 bg-muted/40 rounded-xl shadow p-6 text-center transition-transform duration-200 hover:scale-105 hover:shadow-2xl border border-[#e5d8f6]">
               <div className="w-24 h-24 rounded-full mb-3 flex items-center justify-center overflow-hidden border-4 border-[#b983ff] bg-muted">
-                <img src="/team/tali.jpg" alt="Tali" className="w-full h-full object-cover rounded-full" />
+                <img src="/team/tali.jpeg" alt="Tali" className="w-full h-full object-cover rounded-full" />
               </div>
               <div className="flex flex-col items-center">
                 <strong className="text-center">Curadoria</strong>
