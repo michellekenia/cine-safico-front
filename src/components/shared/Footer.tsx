@@ -17,10 +17,9 @@ const Footer = () => {
           {/* Right: Contact */}
           <div className="text-center md:text-right">
             <p className="text-sm">
-              Entre em contato: 
               <a 
                 href="mailto:saficocine@gmail.com" 
-                className="text-white hover:underline ml-1"
+                className="text-white hover:underline"
               >
                 saficocine@gmail.com
               </a>

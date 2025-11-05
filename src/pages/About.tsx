@@ -60,7 +60,7 @@ As informações sobre produções sáficas ainda são insuficientes e dispersas
 
         {/* Futuro */}
         <section className="mb-16">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-primary mb-6 text-center tracking-tight drop-shadow-lg">Construindo o Futuro</h2>
+          <h2 className="text-3xl font-bold text-primary mb-6">Construindo o Futuro</h2>
           <div className="bg-gradient-to-br from-[#4b2676] via-[#6d3fa9] to-[#b983ff] border-2 border-[#4b2676] rounded-2xl shadow-2xl p-8">
             <div className="prose prose-xl max-w-none flex flex-col items-start justify-center">
               <div className="w-full">
@@ -71,20 +71,50 @@ As informações sobre produções sáficas ainda são insuficientes e dispersas
                   A plataforma receberá novas funcionalidades em breve, e para construirmos o melhor, precisamos trabalhar em conjunto.
                 </p>
                 <p className="text-[#f3eaff] leading-relaxed mb-4 text-lg md:text-xl">
-                  Se você quer contribuir com essa evolução, entre em contato através do nosso e-mail!
+                  Se você quer contribuir com essa evolução, entre em contato:
                 </p>
-                <p className="text-[#f3eaff] leading-relaxed flex items-center gap-2 mb-1 text-lg md:text-xl">
+                <p className="text-[#f3eaff] leading-relaxed flex items-center gap-3 text-lg md:text-xl">
                   <span aria-label="E-mail" title="E-mail">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f3eaff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f3eaff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
                       <rect x="3" y="5" width="18" height="14" rx="2"/>
                       <polyline points="3 7 12 13 21 7"/>
                     </svg>
                   </span>
                   saficocine@gmail.com
                 </p>
-                <p className="text-[#f3eaff] leading-relaxed text-lg md:text-xl">
-               
-                </p>
+                
+                {/* Redes Sociais */}
+                <div className="flex flex-col gap-3 mt-3">
+                  {/* Instagram */}
+                  <a
+                    href="https://www.instagram.com/saficocine/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-[#f3eaff] hover:text-white transition-colors duration-200 group text-lg md:text-xl"
+                    aria-label="Seguir no Instagram"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" strokeWidth="2"/>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="currentColor" strokeWidth="2"/>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                    <span className="group-hover:underline">@saficocine</span>
+                  </a>
+                  
+                  {/* X (Twitter) */}
+                  <a
+                    href="https://x.com/saficocine"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 text-[#f3eaff] hover:text-white transition-colors duration-200 group text-lg md:text-xl"
+                    aria-label="Seguir no X"
+                  >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                    <span className="group-hover:underline">@saficocine</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -92,7 +122,7 @@ As informações sobre produções sáficas ainda são insuficientes e dispersas
 
         {/* Time */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-primary mb-8 text-center">Quem fez o Cine Sáfico</h2>
+          <h2 className="text-3xl font-bold text-primary mb-6 text-center">Time</h2>
           <div className="prose prose-lg max-w-none grid md:grid-cols-3 gap-8">
             {/* Michelle Kênia */}
             <div className="flex flex-col items-center gap-2 mb-4 bg-muted/40 rounded-xl shadow p-6 text-center transition-transform duration-200 hover:scale-105 hover:shadow-2xl border border-[#e5d8f6]">
