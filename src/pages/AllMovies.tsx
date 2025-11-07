@@ -48,12 +48,10 @@ import {
 } from "@/components/ui/popover";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import useScrollToTop from "../hooks/useScrollToTop";
 
 const AllMovies = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  useScrollToTop();
   
   // Função para extrair parâmetros da URL
   const getUrlParams = () => {
@@ -99,8 +97,10 @@ const AllMovies = () => {
   const [isPlatformPopoverOpen, setIsPlatformPopoverOpen] = useState(false);
   const [isYearPopoverOpen, setIsYearPopoverOpen] = useState(false);
   
-  // Estado para navegação direta de página
-  const [pageInput, setPageInput] = useState<string>("");
+  // Efeito para voltar ao topo quando mudar de página
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
 
   // Fetch data for filters
   useEffect(() => {
@@ -235,25 +235,6 @@ const AllMovies = () => {
       setYearTo(undefined);
     }
     setCurrentPage(1);
-  };
-
-  // Função para navegar para página específica via input
-  const handlePageInputSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const pageNumber = parseInt(pageInput);
-    
-    if (isNaN(pageNumber) || pageNumber < 1) {
-      alert("Por favor, digite um número de página válido (maior que 0)");
-      return;
-    }
-    
-    if (movies && pageNumber > movies.totalPages) {
-      alert(`A página ${pageNumber} não existe. Máximo: ${movies.totalPages}`);
-      return;
-    }
-    
-    setCurrentPage(pageNumber);
-    setPageInput(""); // Limpa o input após navegar
   };
 
   const clearAllFilters = () => {
@@ -741,7 +722,21 @@ const AllMovies = () => {
                         Filtros ativos
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        {[selectedGenre, selectedCountry, selectedLanguage, selectedPlatform, searchTerm].filter(Boolean).length} filtro(s)
+                        {[
+                          selectedGenre,
+                          selectedCountry,
+                          selectedLanguage,
+                          selectedPlatform,
+                          selectedYear,
+                          yearFrom,
+                          yearTo,
+                          searchTerm,
+                        ].filter(
+                          (value, index, self) =>
+                            // Treat yearFrom and yearTo as a single filter entity for counting
+                            (index < 5 || index > 6) ? Boolean(value) : (self.indexOf(yearFrom) === index || self.indexOf(yearTo) === index) && (yearFrom || yearTo)
+                        ).length}{" "}
+                        filtro(s)
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -780,25 +775,6 @@ const AllMovies = () => {
             {/* Pagination */}
             {movies?.totalPages > 1 && (
               <div className="mt-8 flex flex-col items-center gap-4">
-                {/* Navegação direta para página específica */}
-                <form onSubmit={handlePageInputSubmit} className="flex items-center gap-1.5">
-                  <label htmlFor="page-input" className="text-xs text-muted-foreground whitespace-nowrap">
-                    Ir para:
-                  </label>
-                  <Input
-                    id="page-input"
-                    type="number"
-                    min="1"
-                    max={movies.totalPages}
-                    value={pageInput}
-                    onChange={(e) => setPageInput(e.target.value)}
-                    placeholder={currentPage.toString()}
-                    className="w-16 h-7 text-center text-xs"
-                  />
-                  <Button type="submit" size="sm" variant="outline" className="h-7 px-2 text-xs">
-                    Ir
-                  </Button>
-                </form>
                 <div className="flex justify-center">
                 <Pagination>
                   <PaginationContent className="flex-wrap gap-1">
