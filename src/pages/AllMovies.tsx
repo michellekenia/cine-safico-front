@@ -98,6 +98,9 @@ const AllMovies = () => {
   const [isLanguagePopoverOpen, setIsLanguagePopoverOpen] = useState(false);
   const [isPlatformPopoverOpen, setIsPlatformPopoverOpen] = useState(false);
   const [isYearPopoverOpen, setIsYearPopoverOpen] = useState(false);
+  
+  // Estado para navegação direta de página
+  const [pageInput, setPageInput] = useState<string>("");
 
   // Fetch data for filters
   useEffect(() => {
@@ -232,6 +235,25 @@ const AllMovies = () => {
       setYearTo(undefined);
     }
     setCurrentPage(1);
+  };
+
+  // Função para navegar para página específica via input
+  const handlePageInputSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const pageNumber = parseInt(pageInput);
+    
+    if (isNaN(pageNumber) || pageNumber < 1) {
+      alert("Por favor, digite um número de página válido (maior que 0)");
+      return;
+    }
+    
+    if (movies && pageNumber > movies.totalPages) {
+      alert(`A página ${pageNumber} não existe. Máximo: ${movies.totalPages}`);
+      return;
+    }
+    
+    setCurrentPage(pageNumber);
+    setPageInput(""); // Limpa o input após navegar
   };
 
   const clearAllFilters = () => {
@@ -428,7 +450,9 @@ const AllMovies = () => {
                     </PopoverTrigger>
                     <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
                       <Command>
+                        <CommandInput placeholder="Buscar gênero..." />
                         <CommandList>
+                          <CommandEmpty>Nenhum gênero encontrado.</CommandEmpty>
                           <CommandGroup>
                             <CommandItem
                               onSelect={() => {
@@ -755,9 +779,32 @@ const AllMovies = () => {
 
             {/* Pagination */}
             {movies?.totalPages > 1 && (
-              <div className="mt-8 flex justify-center">
+              <div className="mt-8 flex flex-col items-center gap-4">
+                {/* Navegação direta para página específica */}
+                <form onSubmit={handlePageInputSubmit} className="flex items-center gap-1.5">
+                  <label htmlFor="page-input" className="text-xs text-muted-foreground whitespace-nowrap">
+                    Ir para:
+                  </label>
+                  <Input
+                    id="page-input"
+                    type="number"
+                    min="1"
+                    max={movies.totalPages}
+                    value={pageInput}
+                    onChange={(e) => setPageInput(e.target.value)}
+                    placeholder={currentPage.toString()}
+                    className="w-16 h-7 text-center text-xs"
+                  />
+                  <Button type="submit" size="sm" variant="outline" className="h-7 px-2 text-xs">
+                    Ir
+                  </Button>
+                </form>
+                <div className="flex justify-center">
                 <Pagination>
-                  <PaginationContent>
+                  <PaginationContent className="flex-wrap gap-1">
+
+
+                    {/* Página anterior */}
                     <PaginationItem>
                       <PaginationPrevious
                         href="#"
@@ -773,44 +820,137 @@ const AllMovies = () => {
                       />
                     </PaginationItem>
 
-                    {Array.from(
-                      { length: Math.min(5, movies.totalPages) },
-                      (_, i) => {
-                        let pageNumber;
-                        if (movies.totalPages <= 5) {
-                          pageNumber = i + 1;
-                        } else if (currentPage <= 3) {
-                          pageNumber = i + 1;
-                        } else if (currentPage >= movies.totalPages - 2) {
-                          pageNumber = movies.totalPages - 4 + i;
-                        } else {
-                          pageNumber = currentPage - 2 + i;
+                    {/* Lógica de páginas */}
+                    {(() => {
+                      const totalPages = movies.totalPages;
+                      const current = currentPage;
+                      const pages = [];
+
+                      if (totalPages <= 7) {
+                        // Mostra todas as páginas se houver 7 ou menos
+                        for (let i = 1; i <= totalPages; i++) {
+                          pages.push(
+                            <PaginationItem key={i}>
+                              <PaginationLink
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setCurrentPage(i);
+                                }}
+                                isActive={current === i}
+                              >
+                                {i}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        }
+                      } else {
+                        // Determina qual grupo de páginas mostrar baseado na página atual
+                        let startPage = 1;
+                        let endPage = 5;
+                        
+                        if (current > 5) {
+                          // Se a página atual for maior que 5, mostra o grupo atual
+                          const pageGroup = Math.floor((current - 1) / 5);
+                          startPage = pageGroup * 5 + 1;
+                          endPage = Math.min(startPage + 4, totalPages);
                         }
 
-                        return (
-                          <PaginationItem key={pageNumber}>
-                            <PaginationLink
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setCurrentPage(pageNumber);
-                              }}
-                              isActive={currentPage === pageNumber}
-                            >
-                              {pageNumber}
-                            </PaginationLink>
-                          </PaginationItem>
-                        );
+                        // Ellipsis inicial se não estamos no primeiro grupo
+                        if (startPage > 1) {
+                          // Mostra página 1
+                          pages.push(
+                            <PaginationItem key={1}>
+                              <PaginationLink
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setCurrentPage(1);
+                                }}
+                                isActive={current === 1}
+                              >
+                                1
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+
+                          // Ellipsis para voltar páginas anteriores
+                          pages.push(
+                            <PaginationItem key="ellipsis-prev">
+                              <PaginationLink
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  const prevPageGroup = Math.max(1, startPage - 5);
+                                  setCurrentPage(prevPageGroup);
+                                }}
+                                aria-label="Páginas anteriores"
+                              >
+                                ...
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        }
+
+                        // Mostra o grupo atual de páginas
+                        for (let i = startPage; i <= endPage; i++) {
+                          pages.push(
+                            <PaginationItem key={i}>
+                              <PaginationLink
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setCurrentPage(i);
+                                }}
+                                isActive={current === i}
+                              >
+                                {i}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        }
+
+                        // Ellipsis final se há mais páginas
+                        if (endPage < totalPages) {
+                          // Ellipsis para próximas páginas
+                          pages.push(
+                            <PaginationItem key="ellipsis-next">
+                              <PaginationLink
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  const nextPageGroup = Math.min(totalPages, endPage + 1);
+                                  setCurrentPage(nextPageGroup);
+                                }}
+                                aria-label="Próximas páginas"
+                              >
+                                ...
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+
+                          // Sempre mostra última página
+                          pages.push(
+                            <PaginationItem key={totalPages}>
+                              <PaginationLink
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setCurrentPage(totalPages);
+                                }}
+                                isActive={current === totalPages}
+                              >
+                                {totalPages}
+                              </PaginationLink>
+                            </PaginationItem>
+                          );
+                        }
                       }
-                    )}
 
-                    {movies.totalPages > 5 &&
-                      currentPage < movies.totalPages - 2 && (
-                        <PaginationItem>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                      )}
+                      return pages;
+                    })()}
 
+                    {/* Próxima página */}
                     <PaginationItem>
                       <PaginationNext
                         href="#"
@@ -826,8 +966,11 @@ const AllMovies = () => {
                         }
                       />
                     </PaginationItem>
+
+
                   </PaginationContent>
                 </Pagination>
+                </div>
               </div>
             )}
           </>
