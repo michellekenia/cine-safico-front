@@ -241,7 +241,22 @@
 
   /* Genre Section Styles */
   .genre-scroll {
-    @apply flex gap-6 overflow-x-auto pb-4 scrollbar-hide;
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .genre-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .genre-scroll .movie-card .aspect-\[2\/3\] {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2/3;
   }
 
   .scrollbar-hide {
@@ -255,18 +270,54 @@
 
   /* Filter Bar Styles */
   .filter-bar {
-    @apply bg-card border border-border rounded-lg p-4 shadow-sm;
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   }
 
   /* Form Styles */
   .form-input {
-    @apply w-full px-4 py-2 border border-input rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid hsl(var(--input));
+    border-radius: 0.5rem;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     transition: var(--transition-fast);
   }
 
-  .form-label {
-    @apply block text-sm font-medium text-foreground mb-2;
+  .form-input::placeholder {
+    color: hsl(var(--muted-foreground));
   }
+
+  .form-input:focus {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-color: transparent;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--foreground));
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Movie Card Styles - Consistent poster sizes */
+.movie-card img {
+  object-fit: cover;
+  object-position: center;
+  min-height: 100%;
+  width: 100%;
+}
+
+/* Garante que as imagens preencham o container de forma consistente */
+.movie-card .aspect-\[2\/3\] img {
+  object-position: center top;
 }
 
 /* Animações globais */

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import useScrollToTop from "../hooks/useScrollToTop";
+import XLogo from "../components/shared/XLogo";
 
 const About = () => {
   useScrollToTop();
@@ -94,7 +95,6 @@ As informações sobre produções sáficas ainda são insuficientes e dispersas
                     aria-label="Seguir no Instagram"
                   >
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" strokeWidth="2"/>
                       <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="currentColor" strokeWidth="2"/>
                       <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="currentColor" strokeWidth="2"/>
                     </svg>
@@ -170,21 +170,21 @@ As informações sobre produções sáficas ainda são insuficientes e dispersas
                 </svg>
               </a>
             </div>
-            {/* Tali */}
+            {/* Tali de Melo */}
             <div className="flex flex-col items-center gap-2 mb-4 bg-muted/40 rounded-xl shadow p-6 text-center transition-transform duration-200 hover:scale-105 hover:shadow-2xl border border-[#e5d8f6]">
               <div className="w-24 h-24 rounded-full mb-3 flex items-center justify-center overflow-hidden border-4 border-[#b983ff] bg-muted">
-                <img src="/team/tali.jpeg" alt="Tali" className="w-full h-full object-cover rounded-full" />
+                <img src="/team/tali.jpeg" alt="Tali de Melo" className="w-full h-full object-cover rounded-full" />
               </div>
               <div className="flex flex-col items-center">
                 <strong className="text-center">Curadoria</strong>
-                <span className="text-center">Tali</span>
+                <span className="text-center">Tali de Melo</span>
               </div>
               <a
                 href="https://letterboxd.com/osasco12/lists/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 flex flex-col items-center"
-                aria-label="Perfil Letterboxd Tali"
+                aria-label="Perfil Letterboxd Tali de Melo"
               >
                 <svg width="100" height="40" viewBox="0 0 260 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="60" cy="40" r="30" fill="#ff8c2a" />

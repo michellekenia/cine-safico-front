@@ -120,7 +120,7 @@ const Home = () => {
                 {highlightMovies.map((movie) => (
                   <div
                     key={movie.slug}
-                    className="min-w-[200px] md:min-w-[250px]"
+                    className="w-[200px] md:w-[250px] flex-shrink-0"
                   >
                     {/* Usando MovieCardWithState para preservar o estado de navegação */}
                     <MovieCardWithState movie={movie} />
@@ -150,7 +150,7 @@ const Home = () => {
                   </div>
                      <div className="genre-scroll">
                   {movies.map((movie) => (
-                    <div key={movie.slug} className="min-w-[200px] md:min-w-[250px]">
+                    <div key={movie.slug} className="w-[200px] md:w-[250px] flex-shrink-0">
                       {/* Usando MovieCardWithState para preservar o estado de navegação */}
                       <MovieCardWithState movie={movie} />
                     </div>
