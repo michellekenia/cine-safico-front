@@ -1,3 +1,6 @@
+import XLogo from "./XLogo";
+import { Instagram } from "lucide-react";
+
 const Footer = () => {
   return (
     <footer className="bg-[#2F3E46] text-secondary-foreground mt-16">
@@ -14,16 +17,32 @@ const Footer = () => {
             <p className="text-xs text-white">© 2025 Cine Sáfico</p>
           </div>
 
-          {/* Right: Contact */}
-          <div className="text-center md:text-right">
-            <p className="text-sm">
-              <a 
-                href="mailto:saficocine@gmail.com" 
-                className="text-white hover:underline"
-              >
-                saficocine@gmail.com
-              </a>
-            </p>
+          {/* Right: Contact & Social */}
+          <div className="flex items-center space-x-4">
+            <a 
+              href="mailto:saficocine@gmail.com" 
+              className="text-sm text-white hover:underline"
+            >
+              saficocine@gmail.com
+            </a>
+            <a 
+              href="https://x.com/saficocine" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white hover:text-accent transition-colors"
+              aria-label="Seguir no X (Twitter)"
+            >
+              <XLogo className="h-4 w-4" />
+            </a>
+            <a 
+              href="https://www.instagram.com/saficocine/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white hover:text-accent transition-colors"
+              aria-label="Seguir no Instagram"
+            >
+              <Instagram className="h-5 w-5" />
+            </a>
           </div>
         </div>
       </div>
