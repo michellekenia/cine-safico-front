@@ -78,12 +78,17 @@ const MovieCard = ({ movie, showGenre = false }: MovieCardProps) => {
     <Link to={`/filme/${getSlug()}`} className="group h-full">
       <div className="movie-card bg-card rounded-lg overflow-hidden h-full flex flex-col">
         {/* Poster Section - Fixed Height */}
-        <div className="relative aspect-[2/3] overflow-hidden flex-shrink-0">
+        <div className="relative aspect-[2/3] overflow-hidden flex-shrink-0 bg-muted">
           <img
             src={getPoster()}
             alt={`Poster do filme ${getTitle()}`}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
             loading="lazy"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.style.objectFit = 'contain';
+              target.style.backgroundColor = 'var(--muted)';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
