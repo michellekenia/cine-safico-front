@@ -24,6 +24,9 @@ import useScrollToTop from "../hooks/useScrollToTop";
 const Home = () => {
   useScrollToTop();
 
+  // Controle para mostrar/ocultar destaques
+  const SHOW_HIGHLIGHTS = false; // Mude para true quando quiser reativar
+
   const [highlightMovies, setHighlightMovies] = useState<HomeMovies[]>([]);
   const [genreSections, setGenreSections] = useState<GenreSections>({});
   const [genreSlugsMap, setGenreSlugsMap] = useState<Record<string, string>>({});
@@ -101,34 +104,36 @@ const Home = () => {
           </section>
 
           {/* Featured Movies */}
-          <section className="py-16 bg-background">
-            <div className="container mx-auto px-4">
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-3xl font-bold text-foreground">
-                  Destaques
-                </h2>
-                <Link
-                  to="/filmes"
-                  className="flex items-center text-accent hover:underline"
-                >
-                  Ver todos
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </Link>
-              </div>
-
-              <div className="genre-scroll">
-                {highlightMovies.map((movie) => (
-                  <div
-                    key={movie.slug}
-                    className="w-[200px] md:w-[250px] flex-shrink-0"
+          {SHOW_HIGHLIGHTS && highlightMovies.length > 0 && (
+            <section className="py-16 bg-background">
+              <div className="container mx-auto px-4">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-3xl font-bold text-foreground">
+                    Destaques
+                  </h2>
+                  <Link
+                    to="/filmes"
+                    className="flex items-center text-accent hover:underline"
                   >
-                    {/* Usando MovieCardWithState para preservar o estado de navegação */}
-                    <MovieCardWithState movie={movie} />
-                  </div>
-                ))}
+                    Ver todos
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </Link>
+                </div>
+
+                <div className="genre-scroll">
+                  {highlightMovies.map((movie) => (
+                    <div
+                      key={movie.slug}
+                      className="w-[200px] md:w-[250px] flex-shrink-0"
+                    >
+                      {/* Usando MovieCardWithState para preservar o estado de navegação */}
+                      <MovieCardWithState movie={movie} />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          )}
 
           {/* Seções por Gênero */}
           {Object.entries(genreSections).map(([genreName, movies], index) => {
