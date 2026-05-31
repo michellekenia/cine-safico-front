@@ -52,6 +52,16 @@ const MovieCardWithState: React.FC<MovieCardWithStateProps> = ({ movie, showGenr
 
     return stars;
   };
+
+  const getOriginalTitle = (): string => {
+    if ('originalTitle' in movie) return movie.originalTitle || '';
+    return '';
+  };
+
+  const getAlternativeTitlePt = (): string => {
+    if ('alternativeTitlePt' in movie) return movie.alternativeTitlePt || '';
+    return '';
+  };
   
   // Armazenamos a informação necessária para voltar à página com os filtros corretos
   const navigationState = {
@@ -85,10 +95,24 @@ const MovieCardWithState: React.FC<MovieCardWithStateProps> = ({ movie, showGenr
         </div>
         
         <div className="p-4 flex flex-col flex-1">
-          <div className="h-14 mb-3 flex items-start">
+          <div className="mb-3 flex items-start flex-col space-y-1">
             <h3 className="font-semibold text-lg text-foreground line-clamp-2 group-hover:text-accent transition-colors leading-tight">
               {movie.title}
             </h3>
+            {(getAlternativeTitlePt() || getOriginalTitle()) && (
+              <div className="mt-2 space-y-1">
+                {getOriginalTitle() && (
+                  <p className="text-xs font-light italic leading-relaxed" style={{ color: '#9566A0' }}>
+                    {getOriginalTitle()}
+                  </p>
+                )}
+                {getAlternativeTitlePt() && (
+                  <p className="text-xs font-light italic leading-relaxed" style={{ color: '#9566A0' }}>
+                    {getAlternativeTitlePt()}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
           
           {/* Rating Section - Exibindo estrelas de rating */}

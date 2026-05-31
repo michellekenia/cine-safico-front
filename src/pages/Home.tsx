@@ -91,7 +91,7 @@ const Home = () => {
                 Cine Sáfico
               </h1>
               <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Descubra e celebre o cinema LGBTQ+ feminino. Histórias
+                Descubra e celebre o cinema LBT feminino. Histórias
                 autênticas, representação genuína.
               </p>
               <Link to="/filmes">

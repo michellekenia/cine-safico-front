@@ -246,10 +246,25 @@ const MovieDetails = () => {
           {/* Movie Info */}
           <div className="lg:col-span-2">
             <div className="flex items-start justify-between mb-4">
-              <h1 className="text-4xl md:text-5xl font-bold text-primary">
-                {movie.title}
-              </h1>
-      
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-primary">
+                  {movie.title}
+                </h1>
+                {(movie.alternativeTitlePt || movie.originalTitle) && (
+                  <div className="mt-6 space-y-3">
+                    {movie.originalTitle && (
+                      <p className="text-xl font-light italic leading-relaxed" style={{ color: '#9566A0' }}>
+                        {movie.originalTitle}
+                      </p>
+                    )}
+                    {movie.alternativeTitlePt && (
+                      <p className="text-xl font-light italic leading-relaxed" style={{ color: '#9566A0' }}>
+                        {movie.alternativeTitlePt}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Genres */}

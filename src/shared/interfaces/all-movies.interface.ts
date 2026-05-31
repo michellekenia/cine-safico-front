@@ -4,7 +4,9 @@
 export interface MovieListItem {
   id: string;           
   slug: string;         
-  title: string;        
+  title: string;
+  originalTitle: string;
+  alternativeTitlePt: string;        
   releaseDate: string;  
   posterImage: string; 
 }
