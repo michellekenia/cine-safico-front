@@ -161,4 +161,4 @@ A aplicação consome dados da API CINE-SAFICO:
 
 ---
 
-Criado com 💜 para a comunidade LBT | [Website](https://cine-safico-front.vercel.app/)
+[Website](https://cine-safico-front.vercel.app/)
