@@ -17,6 +17,7 @@ import { GenreItem } from "@/shared/interfaces/all-genres.interface";
 import {
   getHighLightsMovies,
   getGenresMovies,
+  getMovieList,
 } from "@/shared/api/home-movies";
 import { getAllGenres } from "@/shared/api/all-genres";
 import useScrollToTop from "../hooks/useScrollToTop";
@@ -27,6 +28,7 @@ const Home = () => {
   // Controle para mostrar/ocultar destaques
   const SHOW_HIGHLIGHTS = false; // Mude para true quando quiser reativar
 
+  const [corpusChristiMovies, setCorpusChristiMovies] = useState<HomeMovies[]>([]);
   const [highlightMovies, setHighlightMovies] = useState<HomeMovies[]>([]);
   const [genreSections, setGenreSections] = useState<GenreSections>({});
   const [genreSlugsMap, setGenreSlugsMap] = useState<Record<string, string>>({});
@@ -40,15 +42,23 @@ const Home = () => {
 
       try {
         // Busca os destaques, seções por gênero e todos os gêneros disponíveis
-        const [highlightsResponse, sectionsResponse, allGenresResponse] = await Promise.all([
+
+        const [
+          highlightsResponse,
+          sectionsResponse,
+          allGenresResponse,
+          corpusChristiResponse,
+        ] = await Promise.all([
           getHighLightsMovies(),
           getGenresMovies(),
-          getAllGenres()
+          getAllGenres(),
+          getMovieList("feriado-corpus-christi"),
         ]);
 
         setHighlightMovies(highlightsResponse);
         setGenreSections(sectionsResponse);
-        
+        setCorpusChristiMovies(corpusChristiResponse.data);
+
         // Cria um mapa de nome do gênero para seu slug
         const genreMap: Record<string, string> = {};
         allGenresResponse.items.forEach((genre: GenreItem) => {
@@ -56,7 +66,7 @@ const Home = () => {
           genreMap[genre.nomePt.toLowerCase()] = genre.slug;
           genreMap[genre.nome.toLowerCase()] = genre.slug;
         });
-        
+
         setGenreSlugsMap(genreMap);
       } catch (err) {
         setError("Erro ao carregar os filmes");
@@ -72,10 +82,10 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {isLoading ? (
-        <Loader 
-          message="Carregando filmes em destaque..." 
-          size="lg" 
-          variant="cinematic" 
+        <Loader
+          message="Carregando filmes em destaque..."
+          size="lg"
+          variant="cinematic"
         />
       ) : error ? (
         <div className="min-h-screen flex items-center justify-center">
@@ -135,36 +145,60 @@ const Home = () => {
             </section>
           )}
 
+          {corpusChristiMovies.length > 0 && (
+            <section className="py-16 bg-background">
+              <div className="container mx-auto px-4">
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-3xl font-bold text-foreground">
+                    Feriado Corpus Christi
+                  </h2>
+                </div>
+
+                <div className="genre-scroll">
+                  {corpusChristiMovies.map((movie) => (
+                    <div
+                      key={movie.slug}
+                      className="w-[200px] md:w-[250px] flex-shrink-0"
+                    >
+                      <MovieCardWithState movie={movie} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+
           {/* Seções por Gênero */}
           {Object.entries(genreSections).map(([genreName, movies], index) => {
             // Obtém o slug do gênero do nosso mapa, ou usa o nome em minúsculas como fallback
             const genreSlug = genreSlugsMap[genreName.toLowerCase()] || genreName.toLowerCase();
-            
+
             return (
               <section key={genreName} className={index % 2 === 0 ? "py-16 bg-muted/30" : "py-16 bg-background"}>
                 <div className="container mx-auto px-4">
                   <div className="flex items-center justify-between mb-8">
                     <h2 className="text-3xl font-bold text-foreground">{genreName}</h2>
-                    <Link 
-                      to={`/filmes?genre=${genreSlug}`} 
+                    <Link
+                      to={`/filmes?genre=${genreSlug}`}
                       className="flex items-center text-accent hover:underline"
                     >
                       Ver todos
                       <ChevronRight className="w-4 h-4 ml-1" />
                     </Link>
                   </div>
-                     <div className="genre-scroll">
-                  {movies.map((movie) => (
-                    <div key={movie.slug} className="w-[200px] md:w-[250px] flex-shrink-0">
-                      {/* Usando MovieCardWithState para preservar o estado de navegação */}
-                      <MovieCardWithState movie={movie} />
-                    </div>
-                  ))}
-                </div>
+                  <div className="genre-scroll">
+                    {movies.map((movie) => (
+                      <div key={movie.slug} className="w-[200px] md:w-[250px] flex-shrink-0">
+                        {/* Usando MovieCardWithState para preservar o estado de navegação */}
+                        <MovieCardWithState movie={movie} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </section>
             );
-          })}      
+          })}
         </>
       )}
     </div>
