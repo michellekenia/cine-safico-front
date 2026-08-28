@@ -108,7 +108,7 @@ const MovieDetails = () => {
     year: () => movie?.releaseDate || '',
     genres: () => {
       if (movie?.genres) {
-        return movie.genres.map(g => g.nome);
+        return movie.genres.map(g => g.nomePt || g.nome);
       }
       return [];
     },
