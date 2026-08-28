@@ -46,7 +46,7 @@ const MovieCard = ({ movie, showGenre = false }: MovieCardProps) => {
 
   const getGenres = (): string[] => {
     if ('genres' in movie && Array.isArray(movie.genres)) {
-      return movie.genres.map(g => g.nome);
+      return movie.genres.map(g => g.nomePt || g.nome);
     }
     return [];
   };
