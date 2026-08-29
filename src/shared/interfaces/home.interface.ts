@@ -25,3 +25,17 @@ export interface MovieListResponse {
   currentPage: number;
   totalPages: number;
 }
+
+export interface MovieListSummary {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  isFeatured: boolean;
+  totalMovies: number;
+}
+
+export interface AllMovieListsResponse {
+  items: MovieListSummary[];
+  total: number;
+}

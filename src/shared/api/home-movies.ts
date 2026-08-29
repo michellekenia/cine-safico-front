@@ -1,5 +1,5 @@
 import apiClient from "./client";
-import { GenreSections, HomeMovies,  MovieListResponse,} from "../interfaces/home.interface";
+import { GenreSections, HomeMovies, MovieListResponse, AllMovieListsResponse } from "../interfaces/home.interface";
 
 export async function getHighLightsMovies(): Promise<HomeMovies[]> {
     const response = await apiClient.get<HomeMovies[]>('/movies/highlights');
@@ -16,6 +16,17 @@ export async function getMovieList(
 ): Promise<MovieListResponse> {
   const response = await apiClient.get<MovieListResponse>(
     `/movies/lists/${slug}`,
+  );
+
+  return response.data;
+}
+
+export async function getAllMovieLists(
+  featured?: boolean,
+): Promise<AllMovieListsResponse> {
+  const response = await apiClient.get<AllMovieListsResponse>(
+    '/movies/lists-all',
+    { params: featured !== undefined ? { featured } : undefined },
   );
 
   return response.data;
