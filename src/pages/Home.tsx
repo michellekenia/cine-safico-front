@@ -11,13 +11,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 // Interface
-import { GenreSections, HomeMovies } from "@/shared/interfaces/home.interface";
+import { GenreSections, HomeMovies, MovieList } from "@/shared/interfaces/home.interface";
 import { GenreItem } from "@/shared/interfaces/all-genres.interface";
 
 import {
   getHighLightsMovies,
   getGenresMovies,
   getMovieList,
+  getAllMovieLists,
 } from "@/shared/api/home-movies";
 import { getAllGenres } from "@/shared/api/all-genres";
 import useScrollToTop from "../hooks/useScrollToTop";
@@ -28,7 +29,7 @@ const Home = () => {
   // Controle para mostrar/ocultar destaques
   const SHOW_HIGHLIGHTS = false; // Mude para true quando quiser reativar
 
-  const [corpusChristiMovies, setCorpusChristiMovies] = useState<HomeMovies[]>([]);
+  const [movieLists, setMovieLists] = useState<{ list: MovieList; movies: HomeMovies[] }[]>([]);
   const [highlightMovies, setHighlightMovies] = useState<HomeMovies[]>([]);
   const [genreSections, setGenreSections] = useState<GenreSections>({});
   const [genreSlugsMap, setGenreSlugsMap] = useState<Record<string, string>>({});
@@ -47,17 +48,25 @@ const Home = () => {
           highlightsResponse,
           sectionsResponse,
           allGenresResponse,
-          corpusChristiResponse,
+          allListsResponse,
         ] = await Promise.all([
           getHighLightsMovies(),
           getGenresMovies(),
           getAllGenres(),
-          getMovieList("feriado-corpus-christi"),
+          getAllMovieLists(true),
         ]);
 
         setHighlightMovies(highlightsResponse);
         setGenreSections(sectionsResponse);
-        setCorpusChristiMovies(corpusChristiResponse.data);
+
+        // Busca os filmes de cada lista temática em destaque, preservando a ordem
+        const listsWithMovies = await Promise.all(
+          allListsResponse.items.map(async (item) => {
+            const response = await getMovieList(item.slug);
+            return { list: response.list, movies: response.data };
+          }),
+        );
+        setMovieLists(listsWithMovies);
 
         // Cria um mapa de nome do gênero para seu slug
         const genreMap: Record<string, string> = {};
@@ -145,28 +154,30 @@ const Home = () => {
             </section>
           )}
 
-          {corpusChristiMovies.length > 0 && (
-            <section className="py-16 bg-background">
-              <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between mb-8">
-                  <h2 className="text-3xl font-bold text-foreground">
-                    Feriado Corpus Christi
-                  </h2>
-                </div>
+          {movieLists
+            .filter(({ movies }) => movies.length > 0)
+            .map(({ list, movies }) => (
+              <section key={list.slug} className="py-16 bg-background">
+                <div className="container mx-auto px-4">
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-3xl font-bold text-foreground">
+                      {list.title}
+                    </h2>
+                  </div>
 
-                <div className="genre-scroll">
-                  {corpusChristiMovies.map((movie) => (
-                    <div
-                      key={movie.slug}
-                      className="w-[200px] md:w-[250px] flex-shrink-0"
-                    >
-                      <MovieCardWithState movie={movie} />
-                    </div>
-                  ))}
+                  <div className="genre-scroll">
+                    {movies.map((movie) => (
+                      <div
+                        key={movie.slug}
+                        className="w-[200px] md:w-[250px] flex-shrink-0"
+                      >
+                        <MovieCardWithState movie={movie} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </section>
-          )}
+              </section>
+            ))}
 
 
           {/* Seções por Gênero */}
