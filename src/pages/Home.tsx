@@ -2,6 +2,7 @@
 import MovieCard from "@/components/shared/MovieCard";
 import MovieCardWithState from "@/components/shared/MovieCardWithState";
 import Loader from "@/components/shared/Loader";
+import ScrollCarousel from "@/components/shared/ScrollCarousel";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Play } from "lucide-react";
 
@@ -139,7 +140,7 @@ const Home = () => {
                   </Link>
                 </div>
 
-                <div className="genre-scroll">
+                <ScrollCarousel>
                   {highlightMovies.map((movie) => (
                     <div
                       key={movie.slug}
@@ -149,7 +150,7 @@ const Home = () => {
                       <MovieCardWithState movie={movie} />
                     </div>
                   ))}
-                </div>
+                </ScrollCarousel>
               </div>
             </section>
           )}
@@ -165,7 +166,7 @@ const Home = () => {
                     </h2>
                   </div>
 
-                  <div className="genre-scroll">
+                  <ScrollCarousel>
                     {movies.map((movie) => (
                       <div
                         key={movie.slug}
@@ -174,7 +175,7 @@ const Home = () => {
                         <MovieCardWithState movie={movie} />
                       </div>
                     ))}
-                  </div>
+                  </ScrollCarousel>
                 </div>
               </section>
             ))}
@@ -198,14 +199,14 @@ const Home = () => {
                       <ChevronRight className="w-4 h-4 ml-1" />
                     </Link>
                   </div>
-                  <div className="genre-scroll">
+                  <ScrollCarousel>
                     {movies.map((movie) => (
                       <div key={movie.slug} className="w-[200px] md:w-[250px] flex-shrink-0">
                         {/* Usando MovieCardWithState para preservar o estado de navegação */}
                         <MovieCardWithState movie={movie} />
                       </div>
                     ))}
-                  </div>
+                  </ScrollCarousel>
                 </div>
               </section>
             );
