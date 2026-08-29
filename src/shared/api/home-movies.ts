@@ -13,9 +13,11 @@ export async function getGenresMovies(): Promise<GenreSections> {
 
 export async function getMovieList(
   slug: string,
+  pageSize?: number,
 ): Promise<MovieListResponse> {
   const response = await apiClient.get<MovieListResponse>(
     `/movies/lists/${slug}`,
+    { params: pageSize !== undefined ? { pageSize } : undefined },
   );
 
   return response.data;
