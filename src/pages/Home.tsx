@@ -63,7 +63,7 @@ const Home = () => {
         // Busca os filmes de cada lista temática em destaque, preservando a ordem
         const listsWithMovies = await Promise.all(
           allListsResponse.items.map(async (item) => {
-            const response = await getMovieList(item.slug);
+            const response = await getMovieList(item.slug, item.totalMovies);
             return { list: response.list, movies: response.data };
           }),
         );
